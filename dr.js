@@ -10,35 +10,45 @@ goog.require('lime.GlossyButton');
 goog.require('lime.transitions.Dissolve');
 goog.require('lib');
 
+goog.require('lime');
+goog.require('lime.Circle');
+goog.require('lime.Sprite');
+goog.require('lime.fill.Frame');
+goog.require('lime.animation.KeyframeAnimation');
+
 // components
 goog.require('dr.Button');
 
 // entrypoint
 dr.start = function(){
 
-	dr.director = new lime.Director(document.body,1024,768);
+//director
+	dr.director = new lime.Director(document.body, dr.WIDTH, dr.HEIGHT);
 	dr.director.makeMobileWebAppCapable();
 
-  lib.loadjsfile("assets/ndollar.js");
+	var gamescene = new lime.Scene;
 
-  var scene = new lime.Scene();
-  var layer = new lime.Layer().setPosition(512,0);
+	 layer = new lime.Layer();
+	gamescene.appendChild(layer);
 
-	if(dr.isBrokenChrome()) layer.setRenderer(lime.Renderer.CANVAS);
 
-  var btn  = dr.makeButton('Play').setPosition(400,400);
-  window.test = btn;
+  var button = 
 
-  dr.setEvent(btn,'click',function() {
-    console.log("dasdsa");
-  });
+	var sprite = new lime.Sprite().setPosition(200,200).setSize(50,50);
+	layer.appendChild(sprite);
 
-  layer.appendChild(btn);
+	var anim = new lime.animation.KeyframeAnimation();
+	for(var r=0;r<6;r++){
+	    for(var c=0;c<10;c++){
+	        anim.addFrame(new lime.fill.Frame('assets/spinner/spinner_sheet.png',c*50,r*50,50,50));
+	    }
+	}
+  window.anim = anim;
+  window.sprite = sprite;
+  sprite.setFill(new lime.fill.Frame('assets/spinner/spinner_sheet.png',50,50,50,50));
 
-  scene.appendChild(layer);
-
-  dr.director.replaceScene(scene);
-
+    // set active scene
+    dr.director.replaceScene(gamescene);
 };
 
 dr.makeButton = function(lbl) {
