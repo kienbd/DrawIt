@@ -25,13 +25,13 @@ dr.Board.prototype.init = function() {
     this._rc = this.getCanvasRect(canvasDom); // canvas rect on page
     this._g.fillStyle = "rgb(255,255,136)";
     this._g.fillRect(0, 0, this._rc.width, 20);
-    goog.events.listen(canvasDom,['mousedown'],function(e){
+    goog.events.listen(canvasDom,['mousedown','touchstart'],function(e){
       $el.mouseDownEvent(e.clientX, e.clientY, e.button);
     });
-    goog.events.listen(canvasDom,['mousemove'],function(e){
+    goog.events.listen(canvasDom,['mousemove','touchmove'],function(e){
       $el.mouseMoveEvent(e.clientX, e.clientY, e.button);
     });
-    goog.events.listen(canvasDom,['mouseup'],function(e){
+    goog.events.listen(canvasDom,['mouseup','touchend'],function(e){
       $el.mouseUpEvent(e.clientX, e.clientY, e.button);
     });
     window.test = this;
@@ -70,7 +70,8 @@ var getScrollY = function() {
 dr.Board.prototype.mouseDownEvent = function(x, y, button) {
   document.onselectstart = function() { return false; } // disable drag-select
   document.onmousedown = function() { return false; } // disable drag-select
-  if (button <= 1)
+  document.ontouchstart = function() { return false; } // disable drag-select
+  if (button <= 1 || typeof button == 'undefined')
     {
       this._isDown = true;
       x -= this._rc.x;
@@ -105,7 +106,8 @@ dr.Board.prototype.mouseMoveEvent = function(x, y, button) {
 dr.Board.prototype.mouseUpEvent = function(x, y, button) {
   document.onselectstart = function() { return true; } // enable drag-select
   document.onmousedown = function() { return true; } // enable drag-select
-  if (button <= 1)
+  document.ontouchstart = function() { return true; } // enable drag-select
+  if (button <= 1 || typeof button == 'undefined')
     {
       if (this._isDown)
         {
