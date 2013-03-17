@@ -3,9 +3,11 @@ goog.provide('dr.Board');
 
 // get requirements
 goog.require('lime');
+goog.require('lib');
 
 // Constructor
-dr.Board = function(w,h) {
+dr.Board = function(w,h)
+{
     this._isRotationInvariance = false; //che do nhan biet dc ke ca khi ve nghieng
     this._isSomeNoStrokes = false; //che do bat buoc phai ve~ so' net giong dap an
     this._isProtractor = false; //lua chon thuat toan, true-> thuat toan protractor: nhanh hon, ko biet co chinh xac hon ko
@@ -14,9 +16,11 @@ dr.Board = function(w,h) {
 		this._strokes = new Array(); // array of point arrays
 		this._r = new NDollarRecognizer(this.isRotationInvariance);
     this.canvas = new lime.Sprite().setPosition(0,0).setSize(w,h).setFill('assets/board.jpg').setAnchorPoint(0,0).setRenderer(lime.Renderer.CANVAS);
+    window.board = this;
 }
 
-dr.Board.prototype.init = function() {
+dr.Board.prototype.init = function()
+{
     var $el = this;
     var canvasDom = this.canvas.getDeepestDomElement();
     this._g = canvasDom.getContext('2d');
@@ -24,20 +28,20 @@ dr.Board.prototype.init = function() {
     this._g.font = "16px Gentilis";
     this._rc = this.getCanvasRect(canvasDom); // canvas rect on page
     this._g.fillStyle = "rgb(255,255,136)";
-    this._g.fillRect(0, 0, this._rc.width, 20);
-    goog.events.listen(canvasDom,['mousedown','touchstart'],function(e){
+    this._g.fillRect(0, 0, this._rc.clientWidth, 20);
+    goog.events.listen(canvasDom,['mousedown','touchstart'],function(e) {
       $el.mouseDownEvent(e.clientX, e.clientY, e.button);
     });
-    goog.events.listen(canvasDom,['mousemove','touchmove'],function(e){
+    goog.events.listen(canvasDom,['mousemove','touchmove'],function(e) {
       $el.mouseMoveEvent(e.clientX, e.clientY, e.button);
     });
-    goog.events.listen(canvasDom,['mouseup','touchend'],function(e){
+    goog.events.listen(canvasDom,['mouseup','touchend'],function(e) {
       $el.mouseUpEvent(e.clientX, e.clientY, e.button);
     });
-    window.test = this;
 }
 
-dr.Board.prototype.getCanvasRect = function(canvas) {
+dr.Board.prototype.getCanvasRect = function(canvas)
+{
   var w = canvas.clientWidth;
   var h = canvas.clientHeight;
 
@@ -52,7 +56,8 @@ dr.Board.prototype.getCanvasRect = function(canvas) {
     return {x: cx, y: cy, width: w, height: h};
 }
 
-var getScrollY = function() {
+var getScrollY = function()
+{
   var scrollY = 0;
   if (typeof(document.body.parentElement) != 'undefined')
     {
@@ -64,10 +69,12 @@ var getScrollY = function() {
       }
       return scrollY;
 }
+
 //
 // Mouse Events
 //
-dr.Board.prototype.mouseDownEvent = function(x, y, button) {
+dr.Board.prototype.mouseDownEvent = function(x, y, button)
+{
   document.onselectstart = function() { return false; } // disable drag-select
   document.onmousedown = function() { return false; } // disable drag-select
   document.ontouchstart = function() { return false; } // disable drag-select
@@ -79,7 +86,7 @@ dr.Board.prototype.mouseDownEvent = function(x, y, button) {
       if (this._points.length == 0)
         {
           this._strokes.length = 0;
-          this._g.clearRect(0, 0, this._rc.width, this._rc.height);
+          this._g.clearRect(0, 0, this._rc.clientWidth, this._rc.clientHeight);
         }
         this._points.length = 1; // clear
         this._points[0] = new Point(x, y);
@@ -87,14 +94,16 @@ dr.Board.prototype.mouseDownEvent = function(x, y, button) {
         var clr = "rgb(" + rand(0,200) + "," + rand(0,200) + "," + rand(0,200) + ")";
         this._g.strokeStyle = clr;
         this._g.fillStyle = clr;
-        this._g.fillRect(x - 4, y - 3, 9, 9);
+        this._g.fillRect(x, y, this._g.lineWidth, this._g.lineWidth);
     }
     else if (button == 2)
       {
         drawText("Recognizing gesture...");
       }
 }
-dr.Board.prototype.mouseMoveEvent = function(x, y, button) {
+
+dr.Board.prototype.mouseMoveEvent = function(x, y, button)
+{
   if (this._isDown)
     {
       x -= this._rc.x;
@@ -103,7 +112,9 @@ dr.Board.prototype.mouseMoveEvent = function(x, y, button) {
       this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
     }
 }
-dr.Board.prototype.mouseUpEvent = function(x, y, button) {
+
+dr.Board.prototype.mouseUpEvent = function(x, y, button)
+{
   document.onselectstart = function() { return true; } // enable drag-select
   document.onmousedown = function() { return true; } // enable drag-select
   document.ontouchstart = function() { return true; } // enable drag-select
@@ -130,6 +141,7 @@ dr.Board.prototype.mouseUpEvent = function(x, y, button) {
             this._points.length = 0; // clear and signal to clear strokes on next mousedown
       }
 }
+
 dr.Board.prototype.drawConnectedPoint = function(from, to)
 {
   this._g.beginPath();
@@ -138,66 +150,126 @@ dr.Board.prototype.drawConnectedPoint = function(from, to)
   this._g.closePath();
   this._g.stroke();
 }
+
 var drawText = function(str)
 {
   console.log(str);
   // this._g.fillStyle = "rgb(255,255,136)";
-  // this._g.fillRect(0, 0, _rc.width, 20);
+  // this._g.fillRect(0, 0, _rc.clientWidth, 20);
   // this._g.fillStyle = "rgb(0,0,255)";
   // this._g.fillText(str, 1, 14);
 }
+
 var rand = function(low, high)
 {
   return Math.floor((high - low + 1) * Math.random()) + low;
 }
+
 var round = function(n, d) // round 'n' to 'd' decimals
 {
   d = Math.pow(10, d);
   return Math.round(n * d) / d
 }
+
 //
-// Multistroke Adding and Clearing
+// Multistroke Adding and Clearing and Submitting
 //
+
+dr.Board.prototype.submit = function() {
+  drawText("Recognizing gesture...");
+  if (this._strokes.length > 1 || (this._strokes.length == 1 && this._strokes[0].length >= 10))
+    {
+      var result = this._r.Recognize(this._strokes, this.isRotationInvariance, this.isSameNoStrokes, this.isProtractor);
+      drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
+      alert("Result: " + result.Name + " (" + round(result.Score,2) + ").");
+    }
+    else
+      {
+        drawText("Too little input made. Please try again.");
+        alert("Too little input made. Please try again.");
+      }
+      this._points.length = 0; // clear and signal to clear strokes on next mousedown
+
+}
+
 // function onClickAddExisting()
 // {
-// if (_strokes.length > 0)
-// {
-// if (_strokes.length < 5 || confirm("With " + _strokes.length + " component strokes, it will take a few moments to add this gesture. Proceed?"))
-// {
-// var multistrokes = document.getElementById('multistrokes');
-// var name = multistrokes[multistrokes.selectedIndex].value;
-// var num = _r.AddGesture(name, isRotationInvariance, _strokes);
-// drawText("\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + ".");
-// _points.length = 0; // clear and signal to clear strokes on next mousedown
+  // if (_strokes.length > 0)
+    // {
+      // if (_strokes.length < 5 || confirm("With " + _strokes.length + " component strokes, it will take a few moments to add this gesture. Proceed?"))
+        // {
+          // var multistrokes = document.getElementById('multistrokes');
+          // var name = multistrokes[multistrokes.selectedIndex].value;
+          // var num = _r.AddGesture(name, isRotationInvariance, _strokes);
+          // drawText("\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + ".");
+          // _points.length = 0; // clear and signal to clear strokes on next mousedown
+        // }
+    // }
 // }
-// }
-// }
+
 // function onClickAddCustom()
 // {
-// var name = document.getElementById('custom').value;
-// if (_strokes.length > 0 && name.length > 0)
-// {
-// if (_strokes.length < 5 || confirm("With " + _strokes.length + " component strokes, it will take a few moments to add this gesture. Proceed?"))
-// {
-// var num = _r.AddGesture(name, isRotationInvariance, _strokes);
-// drawText("\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + ".");
-// _points.length = 0; // clear and signal to clear strokes on next mousedown
+  // var name = document.getElementById('custom').value;
+  // if (_strokes.length > 0 && name.length > 0)
+    // {
+      // if (_strokes.length < 5 || confirm("With " + _strokes.length + " component strokes, it will take a few moments to add this gesture. Proceed?"))
+        // {
+          // var num = _r.AddGesture(name, isRotationInvariance, _strokes);
+          // drawText("\"" + name + "\" added. Number of \"" + name + "\"s defined: " + num + ".");
+          // _points.length = 0; // clear and signal to clear strokes on next mousedown
+        // }
+    // }
 // }
-// }
-// }
+//
 // function onClickCustom()
 // {
-// document.getElementById('custom').select();
+  // document.getElementById('custom').select();
 // }
+//
 // function onClickDelete()
 // {
-// var num = _r.DeleteUserGestures(); // deletes any user-defined multistrokes
-// alert("All user-defined gestures have been deleted. Only the 1 predefined gesture remains for each of the " + num + " types.");
-// _points.length = 0; // clear and signal to clear strokes on next mousedown
+  // var num = _r.DeleteUserGestures(); // deletes any user-defined multistrokes
+  // alert("All user-defined gestures have been deleted. Only the 1 predefined gesture remains for each of the " + num + " types.");
+  // _points.length = 0; // clear and signal to clear strokes on next mousedown
 // }
-// function onClickClearStrokes()
+
+dr.Board.prototype.clearBoard = function()
+{
+  this._points.length = 0; // clear and signal to clear strokes on next mousedown
+  this._g.clearRect(0, 0, this._rc.clientWidth, this._rc.clientHeight);
+  // this._g.save();
+  this.canvas.renderer.drawCanvasObject.call(this.canvas,this._g);
+  // this._g.restore();
+  // this.canvas.redraw_ = 0;
+  drawText("Canvas cleared.");
+}
+
+// dr.Board.prototype.undoStroke = function()
 // {
-// _points.length = 0; // clear and signal to clear strokes on next mousedown
-// _g.clearRect(0, 0, _rc.width, _rc.height);
-// drawText("Canvas cleared.");
+  // this._strokes.splice(this._strokes.length - 1, this._strokes.length);
+  // this._points.splice(this._points.length - 1, this._points.length);
+  // var imageObj = new Image();
+  // imageObj.onload = function()
+  // {
+    // this._g.drawImage(imageObj,0,0);
+  // }
+  // imageObj.src
+
+  // this._strokes[this._strokes.length] = this._points.slice(); // add new copy to set
 // }
+
+dr.Board.prototype.clearAnswers = function()
+{
+  this.Multistrokes = [];
+}
+
+dr.Board.prototype.loadAnswers = function(f)
+{
+  var fc = f.split('/').pop().split('.js')[0];
+  var $el = this;
+  lib.loadjsfile(f);
+  goog.events.listen($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
+    $el._r.Multistrokes = window[fc]();
+    goog.events.unlisten($el.canvas.getDeepestDomElement(),'answersloaded',null);
+  });
+}

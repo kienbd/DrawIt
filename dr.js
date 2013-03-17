@@ -33,11 +33,15 @@ dr.start = function(){
   layer = new lime.Layer();
   gamescene.appendChild(layer);
 
-  var cv = new dr.Board(714,492);
-  cv.init();
+  var cv = new dr.Board(320,220);
   layer.appendChild(cv.canvas);
   // set active scene
   dr.director.replaceScene(gamescene);
+  window.gamescene = gamescene;
+  lime.scheduleManager.callAfter(function(){
+    cv.init();
+    cv.loadAnswers('assets/answers/answer1.js');
+  },null,100);
 
 };
 
@@ -62,6 +66,7 @@ dr.setEvent = function(context,event,callback) {
     }
   });
 };
+
 
 //this is required for outside access after code is compiled in ADVANCED_COMPILATIONS mode
 goog.exportSymbol('dr.start', dr.start);
