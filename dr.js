@@ -7,7 +7,6 @@ goog.require('lime.Director');
 goog.require('lime.Scene');
 goog.require('lime.Layer');
 goog.require('lime.GlossyButton');
-goog.require('lime.transitions.Dissolve');
 goog.require('lib');
 
 goog.require('lime');
@@ -23,22 +22,27 @@ goog.require('dr.Sprite');
 dr.start = function(){
 
 
+  var cv ;
   lib.loadjsfile('assets/ndollar.js',function() {
-
+  var cv = new dr.Board(320,220);
+    cv.init();
+    cv.loadAnswers('assets/answers/answer1.js');
+    layer.appendChild(cv.canvas);
   });
 
   //director
-  dr.director = new lime.Director(document.body, dr.WIDTH, dr.HEIGHT);
+  dr.director = new lime.Director(document.body, 600, 600);
   dr.director.makeMobileWebAppCapable();
 
   var gamescene = new lime.Scene;
 
   var btn = new dr.Button("assets/3-2.png",254,65).setPosition(200,200);
-  layer = new lime.Layer();
+  var layer = new lime.Layer();
   gamescene.appendChild(layer);
 
-  layer.appendChild(btn);
+  // set active scene
   dr.director.replaceScene(gamescene);
+  window.gamescene = gamescene;
 
 };
 
