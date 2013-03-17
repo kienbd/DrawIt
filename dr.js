@@ -11,18 +11,21 @@ goog.require('lime.transitions.Dissolve');
 goog.require('lib');
 
 goog.require('lime');
-goog.require('lime.Circle');
 goog.require('lime.Sprite');
 goog.require('lime.fill.Frame');
-goog.require('lime.animation.KeyframeAnimation');
 
 // components
 goog.require('dr.Button');
 goog.require('dr.Board');
+goog.require('dr.Sprite');
 
 // entrypoint
 dr.start = function(){
-  // lib.loadjsfile('assets/ndollar.js');
+
+
+  lib.loadjsfile('assets/ndollar.js',function() {
+
+  });
 
   //director
   dr.director = new lime.Director(document.body, dr.WIDTH, dr.HEIGHT);
@@ -30,21 +33,13 @@ dr.start = function(){
 
   var gamescene = new lime.Scene;
 
+  var btn = new dr.Button("assets/3-2.png",254,65).setPosition(200,200);
   layer = new lime.Layer();
   gamescene.appendChild(layer);
 
-  var cv = new dr.Board(714,492);
-  cv.init();
-  layer.appendChild(cv.canvas);
-  // set active scene
+  layer.appendChild(btn);
   dr.director.replaceScene(gamescene);
 
-};
-
-dr.makeButton = function(lbl) {
-  var btn = new dr.Button(lbl).setSize(300,90);
-  btn.clickStatus = "avail";
-  return btn;
 };
 
 dr.isBrokenChrome = function(){
@@ -61,6 +56,15 @@ dr.setEvent = function(context,event,callback) {
       callback();
     }
   });
+};
+
+
+//dr maker
+
+//make Button
+dr.makeGlossyButton = function(lbl) {
+  var btn = new dr.GlossyButton(lbl).setSize(300,90);
+  return btn;
 };
 
 //this is required for outside access after code is compiled in ADVANCED_COMPILATIONS mode
