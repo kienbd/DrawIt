@@ -14,7 +14,7 @@ dr.GlossyButton = function(lbl) {
 
   this.clickStatus = "avail";
 };
-goog.inherits(dr.Button,lime.GlossyButton);
+goog.inherits(dr.GlossyButton,lime.GlossyButton);
 
 
 dr.GlossyButton.prototype.makeState_ = function() {
