@@ -69,4 +69,18 @@ var answer1 = function() //must be same as file name
   ));
   return answers;
 }
-goog.events.fireListeners(document.getElementsByTagName('canvas')[0],'answersloaded',false,{type: 'answersloaded', target: document.getElementsByTagName('canvas')[0]});
+
+var event;
+if (document.createEvent) {
+  event = document.createEvent("HTMLEvents");
+  event.initEvent("answersloaded", true, true);
+} else {
+  event = document.createEventObject();
+  event.eventType = "answersloaded";
+}
+
+if (document.createEvent) {
+  document.getElementsByTagName('canvas')[0].dispatchEvent(event);
+} else {
+  document.getElementsByTagName('canvas')[0].fireEvent("on" + event.eventType, event);
+}

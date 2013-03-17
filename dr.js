@@ -20,30 +20,26 @@ goog.require('dr.Sprite');
 
 // entrypoint
 dr.start = function(){
-
-
-  var cv ;
-  lib.loadjsfile('assets/ndollar.js',function() {
-  var cv = new dr.Board(320,220);
-    cv.init();
-    cv.loadAnswers('assets/answers/answer1.js');
-    layer.appendChild(cv.canvas);
-  });
-
-  //director
-  dr.director = new lime.Director(document.body, 600, 600);
+    //director
+  dr.director = new lime.Director(document.body, 320, 480);
   dr.director.makeMobileWebAppCapable();
 
   var gamescene = new lime.Scene;
 
   var btn = new dr.Button("assets/3-2.png",254,65).setPosition(200,200);
   var layer = new lime.Layer();
+  var cv = new dr.Board(320,220);
+  layer.appendChild(cv.canvas);
+  lib.loadjsfile('assets/ndollar.js',function() {
+    cv.init();
+    cv.loadAnswers('assets/answers/answer1.js');
+  });
+
   gamescene.appendChild(layer);
 
   // set active scene
   dr.director.replaceScene(gamescene);
   window.gamescene = gamescene;
-
 };
 
 dr.isBrokenChrome = function(){

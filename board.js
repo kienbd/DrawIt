@@ -14,7 +14,6 @@ dr.Board = function(w,h)
     this._isDown = false;
 		this._points = new Array(); // point array for current stroke
 		this._strokes = new Array(); // array of point arrays
-		this._r = new NDollarRecognizer(this.isRotationInvariance);
     this.canvas = new lime.Sprite().setPosition(0,0).setSize(w,h).setFill('assets/board.jpg').setAnchorPoint(0,0).setRenderer(lime.Renderer.CANVAS);
     window.board = this;
 }
@@ -22,6 +21,7 @@ dr.Board = function(w,h)
 dr.Board.prototype.init = function()
 {
     var $el = this;
+		this._r = new NDollarRecognizer(this.isRotationInvariance);
     var canvasDom = this.canvas.getDeepestDomElement();
     this._g = canvasDom.getContext('2d');
     this._g.lineWidth = 3;
@@ -92,6 +92,7 @@ dr.Board.prototype.mouseDownEvent = function(x, y, button)
         this._points[0] = new Point(x, y);
         drawText("Recording stroke #" + (this._strokes.length + 1) + "...");
         var clr = "rgb(" + rand(0,200) + "," + rand(0,200) + "," + rand(0,200) + ")";
+        console.log(clr);
         this._g.strokeStyle = clr;
         this._g.fillStyle = clr;
         this._g.fillRect(x, y, this._g.lineWidth, this._g.lineWidth);
@@ -144,6 +145,7 @@ dr.Board.prototype.mouseUpEvent = function(x, y, button)
 
 dr.Board.prototype.drawConnectedPoint = function(from, to)
 {
+
   this._g.beginPath();
   this._g.moveTo(this._points[from].X, this._points[from].Y);
   this._g.lineTo(this._points[to].X, this._points[to].Y);
@@ -269,6 +271,7 @@ dr.Board.prototype.loadAnswers = function(f)
   var $el = this;
   lib.loadjsfile(f);
   goog.events.listen($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
+    console.log(fc);
     $el._r.Multistrokes = window[fc]();
     goog.events.unlisten($el.canvas.getDeepestDomElement(),'answersloaded',null);
   });
