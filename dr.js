@@ -64,7 +64,7 @@ dr.start = function(){
   gamescene.appendChild(topBar);
 
 
-  var QuizHolder = new lime.Layer().setPosition(0,50);
+  var QuizHolder = new lime.Layer().setPosition(0,40);
   var Quiz = new lime.Sprite().setFill("#D62EDB").setAnchorPoint(0,0);
   Quiz.setPosition(50,0);
   Quiz.setSize(220,160);
@@ -78,7 +78,7 @@ dr.start = function(){
   gamescene.appendChild(QuizHolder);
 
 
-  var funcBtnHolder = new lime.Layer().setPosition(0,220);
+  var funcBtnHolder = new lime.Layer().setPosition(0,210);
   fsprite = new lime.Sprite().setFill('#1BE0B5').setAnchorPoint(0,0);
   fsprite.setSize(320,50);
 
@@ -87,9 +87,9 @@ dr.start = function(){
   gamescene.appendChild(funcBtnHolder);
 
 
-  var Board = new lime.Layer().setPosition(0,280);
+  var Board = new lime.Layer().setPosition(0,270);
   bsprite = new lime.Sprite().setFill("#E0941B").setAnchorPoint(0,0);
-  bsprite.setSize(320,200);
+  bsprite.setSize(320,220);
 
   Board.appendChild(bsprite);
 
