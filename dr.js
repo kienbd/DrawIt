@@ -25,25 +25,13 @@ goog.require('dr.Scene');
 dr.start = function(){
     //director
   dr.director = new lime.Director(document.body);
+  dr.director.setSize(320,480);
   dr.director.makeMobileWebAppCapable();
-
-  var gamescene = dr.Scene.makeGameScene(dr.director);
-
-  dr.director.replaceScene(gamescene);
-  window.gamescene = gamescene;
 
   var gamescene = dr.Scene.makeGameScene(dr.director);
   var menuscene = dr.Scene.makeMenuScene();
   gamescene.transScenes.menuScene = menuscene;
   dr.director.replaceScene(gamescene);
-};
-
-//dr maker
-
-//make Button
-dr.makeGlossyButton = function(lbl) {
-  var btn = new dr.GlossyButton(lbl).setSize(160,30);
-  return btn;
 };
 
 //this is required for outside access after code is compiled in ADVANCED_COMPILATIONS mode

@@ -21,7 +21,7 @@ dr.GlossyButton.prototype.makeState_ = function() {
     var state = new lime.RoundedRect().setFill('#fff').setRadius(10);
     state.inner = new lime.RoundedRect().setRadius(10);
     state.label = new lime.Label().setAlign('center').
-        setFontFamily('"Trebuchet MS"').setFontColor('#eef').setFontSize(28);
+        setFontFamily('"Trebuchet MS"').setFontColor('#eef').setFontSize(14);
 
     state.appendChild(state.inner);
     state.inner.appendChild(state.label);
@@ -47,3 +47,11 @@ dr.GlossyButton.prototype.setColor = function(clr) {
     return this;
 };
 
+
+
+
+//make Button
+dr.GlossyButton.makeGlossyButton = function(lbl) {
+  var btn = new dr.GlossyButton(lbl).setSize(80,50);
+  return btn;
+};

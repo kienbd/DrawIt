@@ -63,17 +63,26 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.appendChild(QuizHolder);
 
 
-  var funcBtnHolder = new lime.Layer().setPosition(0,210);
+  var funcBtnHolder = new lime.Layer().setPosition(0,205);
   fsprite = new lime.Sprite().setFill('#1BE0B5').setAnchorPoint(0,0);
   fsprite.setSize(320,50);
 
+  var submit = dr.GlossyButton.makeGlossyButton("SUBMIT");
+  submit.setPosition(70 + 40,25);
+  var clear = dr.GlossyButton.makeGlossyButton("CLEAR");
+  clear.setPosition(170 + 40,25);
+
+
+
   funcBtnHolder.appendChild(fsprite);
+  funcBtnHolder.appendChild(submit);
+  funcBtnHolder.appendChild(clear);
 
   gamescene.appendChild(funcBtnHolder);
 
 
   var boardHolder = new lime.Layer();
-  var board = new dr.Board(0,270,320,220);
+  var board = new dr.Board(0,260,320,210);
 
   boardHolder.appendChild(board.canvas);
   lib.loadjsfile('assets/ndollar.js',function() {
@@ -83,6 +92,12 @@ dr.Scene.makeGameScene = function(director) {
 
   gamescene.appendChild(boardHolder);
 
+  lib.setEvent(submit,['touchstart','mousedown'],function() {
+    board.submit();
+  });
+  lib.setEvent(clear,['touchstart','mousedown'],function() {
+    board.clearBoard();
+  });
   return gamescene;
 };
 
