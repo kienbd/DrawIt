@@ -6,7 +6,7 @@ goog.require('lime');
 goog.require('lib');
 
 // Constructor
-dr.Board = function(w,h)
+dr.Board = function(x,y,w,h)
 {
     this._isRotationInvariance = false; //che do nhan biet dc ke ca khi ve nghieng
     this._isSomeNoStrokes = false; //che do bat buoc phai ve~ so' net giong dap an
@@ -14,7 +14,7 @@ dr.Board = function(w,h)
     this._isDown = false;
 		this._points = new Array(); // point array for current stroke
 		this._strokes = new Array(); // array of point arrays
-    this.canvas = new lime.Sprite().setPosition(0,0).setSize(w,h).setFill('assets/board.jpg').setAnchorPoint(0,0).setRenderer(lime.Renderer.CANVAS);
+    this.canvas = new lime.Sprite().setPosition(x,y).setSize(w,h).setFill('assets/board.jpg').setAnchorPoint(0,0).setRenderer(lime.Renderer.CANVAS);
     window.board = this;
 }
 
@@ -24,9 +24,9 @@ dr.Board.prototype.init = function()
 		this._r = new NDollarRecognizer(this.isRotationInvariance);
     var canvasDom = this.canvas.getDeepestDomElement();
     this._g = canvasDom.getContext('2d');
-    this._g.lineWidth = 3;
+    this._g.lineWidth = 4;
     this._g.font = "16px Gentilis";
-    this._rc = this.getCanvasRect(canvasDom); // canvas rect on page
+    this._rc = this.getCanvasRect(this.canvas); // canvas rect on page
     this._g.fillStyle = "rgb(255,255,136)";
     this._g.fillRect(0, 0, this._rc.clientWidth, 20);
     goog.events.listen(canvasDom,['mousedown','touchstart'],function(e) {
@@ -42,17 +42,17 @@ dr.Board.prototype.init = function()
 
 dr.Board.prototype.getCanvasRect = function(canvas)
 {
-  var w = canvas.clientWidth;
-  var h = canvas.clientHeight;
+  var w = canvas.getSize().width;
+  var h = canvas.getSize().height;
 
-  var cx = canvas.offsetLeft;
-  var cy = canvas.offsetTop;
-  while (canvas.offsetParent != null)
-    {
-      canvas = canvas.offsetParent;
-      cx += canvas.offsetLeft;
-      cy += canvas.offsetTop;
-    }
+  var cx = canvas.getPosition().x;
+  var cy = canvas.getPosition().y;
+  // while (canvas.offsetParent != null)
+    // {
+      // canvas = canvas.offsetParent;
+      // cx += canvas.offsetLeft;
+      // cy += canvas.offsetTop;
+    // }
     return {x: cx, y: cy, width: w, height: h};
 }
 
@@ -91,8 +91,9 @@ dr.Board.prototype.mouseDownEvent = function(x, y, button)
         this._points.length = 1; // clear
         this._points[0] = new Point(x, y);
         drawText("Recording stroke #" + (this._strokes.length + 1) + "...");
-        var clr = "rgb(" + rand(0,200) + "," + rand(0,200) + "," + rand(0,200) + ")";
-        console.log(clr);
+        // var clr = "rgb(" + rand(0,200) + "," + rand(0,200) + "," + rand(0,200) + ")";
+        var clr = "rgb(255,250,240)";
+        // console.log(clr);
         this._g.strokeStyle = clr;
         this._g.fillStyle = clr;
         this._g.fillRect(x, y, this._g.lineWidth, this._g.lineWidth);
@@ -109,6 +110,7 @@ dr.Board.prototype.mouseMoveEvent = function(x, y, button)
     {
       x -= this._rc.x;
       y -= this._rc.y - getScrollY();
+      console.log(y);
       this._points[this._points.length] = new Point(x, y); // append
       this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
     }
@@ -272,7 +274,13 @@ dr.Board.prototype.loadAnswers = function(f)
   lib.loadjsfile(f);
   goog.events.listen($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
     console.log(fc);
-    $el._r.Multistrokes = window[fc]();
+    $el.clearAnswers();
+    var answers = window[fc]();
+    while (answers.length > 0)
+      {
+        var a = answers.pop();
+        $el._r.AddGesture(a.name,$el._isRotationInvariance,a.strokes);
+      }
     goog.events.unlisten($el.canvas.getDeepestDomElement(),'answersloaded',null);
   });
 }

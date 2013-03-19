@@ -24,6 +24,7 @@ lib.loadjsfile = function loadScript(url, callback){
 
     script.src = url;
     document.getElementsByTagName("head")[0].appendChild(script);
+    return script;
 };
 
 lib.isBrokenChrome = function(){

@@ -27,37 +27,37 @@ dr.start = function(){
   dr.director = new lime.Director(document.body);
   dr.director.makeMobileWebAppCapable();
 
-
-  // var layer = new lime.Layer();
-  // var board = new dr.Board(320,220);
+  var gamescene = dr.Scene.makeGameScene(dr.director);
+  var layer = new lime.Layer();
+  var board = new dr.Board(0,270,320,220);
   // var submitbtn = dr.makeGlossyButton('submit').setPosition(160,280);
   // var clearbtn = dr.makeGlossyButton('clear').setPosition(160,360);
 
-  // dr.setEvent(submitbtn,'click',function() {
+  // lib.setEvent(submitbtn,'click',function() {
     // board.submit();
   // });
-  // dr.setEvent(clearbtn,'click',function() {
+  // lib.setEvent(clearbtn,'click',function() {
     // board.clearBoard();
   // });
 
-  // layer.appendChild(board.canvas);
+  layer.appendChild(board.canvas);
   // layer.appendChild(submitbtn);
   // layer.appendChild(clearbtn);
-  // lib.loadjsfile('assets/ndollar.js',function() {
-    // board.init();
-    // board.loadAnswers('assets/answers/answer1.js');
-  // });
+  lib.loadjsfile('assets/ndollar.js',function() {
+    board.init();
+    board.loadAnswers('assets/answers/answer1.js');
+  });
 
-  // gamescene.appendChild(layer);
+  gamescene.appendChild(layer);
 
-  // // set active scene
-  // dr.director.replaceScene(gamescene);
-  // window.gamescene = gamescene;
-
-  var gamescene = dr.Scene.makeGameScene(dr.director);
-  var menuscene = dr.Scene.makeMenuScene();
-  gamescene.transScenes.menuScene = menuscene;
+  // set active scene
   dr.director.replaceScene(gamescene);
+  window.gamescene = gamescene;
+
+  // var gamescene = dr.Scene.makeGameScene(dr.director);
+  // var menuscene = dr.Scene.makeMenuScene();
+  // gamescene.transScenes.menuScene = menuscene;
+  // dr.director.replaceScene(gamescene);
 };
 
 //dr maker
