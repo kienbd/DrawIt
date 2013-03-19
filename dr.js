@@ -28,36 +28,14 @@ dr.start = function(){
   dr.director.makeMobileWebAppCapable();
 
   var gamescene = dr.Scene.makeGameScene(dr.director);
-  var layer = new lime.Layer();
-  var board = new dr.Board(0,270,320,220);
-  // var submitbtn = dr.makeGlossyButton('submit').setPosition(160,280);
-  // var clearbtn = dr.makeGlossyButton('clear').setPosition(160,360);
 
-  // lib.setEvent(submitbtn,'click',function() {
-    // board.submit();
-  // });
-  // lib.setEvent(clearbtn,'click',function() {
-    // board.clearBoard();
-  // });
-
-  layer.appendChild(board.canvas);
-  // layer.appendChild(submitbtn);
-  // layer.appendChild(clearbtn);
-  lib.loadjsfile('assets/ndollar.js',function() {
-    board.init();
-    board.loadAnswers('assets/answers/answer1.js');
-  });
-
-  gamescene.appendChild(layer);
-
-  // set active scene
   dr.director.replaceScene(gamescene);
   window.gamescene = gamescene;
 
-  // var gamescene = dr.Scene.makeGameScene(dr.director);
-  // var menuscene = dr.Scene.makeMenuScene();
-  // gamescene.transScenes.menuScene = menuscene;
-  // dr.director.replaceScene(gamescene);
+  var gamescene = dr.Scene.makeGameScene(dr.director);
+  var menuscene = dr.Scene.makeMenuScene();
+  gamescene.transScenes.menuScene = menuscene;
+  dr.director.replaceScene(gamescene);
 };
 
 //dr maker

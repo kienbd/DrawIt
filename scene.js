@@ -72,19 +72,16 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.appendChild(funcBtnHolder);
 
 
-  var Board = new lime.Layer().setPosition(0,270);
-  bsprite = new lime.Sprite().setFill("#E0941B").setAnchorPoint(0,0);
-  bsprite.setSize(320,220);
-  window.abc = gamescene;
+  var boardHolder = new lime.Layer();
+  var board = new dr.Board(0,270,320,220);
 
-  goog.events.listen(bsprite,'click',function() {
-    console.log("dsdas");
-    director.replaceScene(gamescene.transScenes.menuScene);
+  boardHolder.appendChild(board.canvas);
+  lib.loadjsfile('assets/ndollar.js',function() {
+    board.init();
+    board.loadAnswers('assets/answers/answer1.js');
   });
 
-  Board.appendChild(bsprite);
-
-  gamescene.appendChild(Board);
+  gamescene.appendChild(boardHolder);
 
   return gamescene;
 };
