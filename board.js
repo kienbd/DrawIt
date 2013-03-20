@@ -110,9 +110,10 @@ dr.Board.prototype.mouseMoveEvent = function(x, y, button)
     {
       x -= this._rc.x;
       y -= this._rc.y - getScrollY();
-      console.log(y);
+      // console.log(y);
       this._points[this._points.length] = new Point(x, y); // append
-      this.drawConnectedPoint(this._points.length - 2, this._points.length - 1);
+      var len = this._points.length;
+      this.drawLine(this._points[len-2],this._points[len-1]);
     }
 }
 
@@ -145,12 +146,21 @@ dr.Board.prototype.mouseUpEvent = function(x, y, button)
       }
 }
 
-dr.Board.prototype.drawConnectedPoint = function(from, to)
-{
+// dr.Board.prototype.drawConnectedPoint = function(from, to)
+// {
 
+  // this._g.beginPath();
+  // this._g.moveTo(this._points[from].X, this._points[from].Y);
+  // this._g.lineTo(this._points[to].X, this._points[to].Y);
+  // this._g.closePath();
+  // this._g.stroke();
+// }
+
+dr.Board.prototype.drawLine = function(p1,p2)
+{
   this._g.beginPath();
-  this._g.moveTo(this._points[from].X, this._points[from].Y);
-  this._g.lineTo(this._points[to].X, this._points[to].Y);
+  this._g.moveTo(p1.X,p1.Y);
+  this._g.lineTo(p2.X,p2.Y);
   this._g.closePath();
   this._g.stroke();
 }
@@ -248,19 +258,13 @@ dr.Board.prototype.clearBoard = function()
   drawText("Canvas cleared.");
 }
 
-// dr.Board.prototype.undoStroke = function()
-// {
-  // this._strokes.splice(this._strokes.length - 1, this._strokes.length);
-  // this._points.splice(this._points.length - 1, this._points.length);
-  // var imageObj = new Image();
-  // imageObj.onload = function()
-  // {
-    // this._g.drawImage(imageObj,0,0);
-  // }
-  // imageObj.src
-
-  // this._strokes[this._strokes.length] = this._points.slice(); // add new copy to set
-// }
+dr.Board.prototype.undoStroke = function()
+{
+  this._strokes.splice(this._strokes.length - 1, this._strokes.length);
+  this._points.splice(this._points.length - 1, this._points.length);
+  this.canvas.renderer.drawCanvasObject.call(window.board.canvas,window.board._g);
+  this.reDraw();
+}
 
 dr.Board.prototype.clearAnswers = function()
 {
@@ -283,4 +287,20 @@ dr.Board.prototype.loadAnswers = function(f)
       }
     goog.events.unlisten($el.canvas.getDeepestDomElement(),'answersloaded',null);
   });
+}
+
+dr.Board.prototype.reDraw = function()
+{
+  this.canvas.renderer.drawCanvasObject.call(this.canvas,this._g);
+  var i=0,j;
+  while (i < this._strokes.length)
+    {
+      j = 0;
+      while (j < this._strokes[i].length - 1)
+        {
+          this.drawLine(this._strokes[i][j],this._strokes[i][j+1]);
+          j++;
+        }
+        i++;
+    }
 }
