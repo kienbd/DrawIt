@@ -21,7 +21,8 @@ if (document.createEvent) {
 }
 
 if (document.createEvent) {
-  document.getElementsByTagName('canvas')[0].dispatchEvent(event);
+  if(typeof document.getElementsByTagName('canvas')[0] != 'undefined')
+    document.getElementsByTagName('canvas')[0].dispatchEvent(event);
 } else {
   document.getElementsByTagName('canvas')[0].fireEvent("on" + event.eventType, event);
 }

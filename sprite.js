@@ -9,12 +9,14 @@ dr.Sprite = function(sprite_sheet,col,row,w,h) {
   //lime.fill.Frame('img',x,y,w,h);
   frame = new lime.fill.Frame(sprite_sheet,0,0,w,h);
   this.setFill(frame);
+  this.setAnchorPoint(0,0);
   this.offset = {width: w,height: h};
   this.url = sprite_sheet;
   this.col = col;
   this.row = row;
   this.totalFrame = col*row;
   this.currentFrame = 0;
+  this.clickStatus = "avail";
 }
 
 goog.inherits(dr.Sprite,lime.Sprite);

@@ -51,7 +51,10 @@ dr.GlossyButton.prototype.setColor = function(clr) {
 
 
 //make Button
-dr.GlossyButton.makeGlossyButton = function(lbl) {
-  var btn = new dr.GlossyButton(lbl).setSize(80,50);
+dr.GlossyButton.makeGlossyButton = function(lbl,w,h) {
+  if(typeof w == "undefined" || typeof h == "undefined")
+    var btn = new dr.GlossyButton(lbl).setSize(80,50);
+  else
+    var btn = new dr.GlossyButton(lbl).setSize(w,h);
   return btn;
 };

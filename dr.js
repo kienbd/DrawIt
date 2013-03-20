@@ -29,9 +29,10 @@ dr.start = function(){
   dr.director.makeMobileWebAppCapable();
 
   var gamescene = dr.Scene.makeGameScene(dr.director);
-  var menuscene = dr.Scene.makeMenuScene();
-  gamescene.transScenes.menuScene = menuscene;
-  dr.director.replaceScene(gamescene);
+  var menuscene = dr.Scene.makeMenuScene(dr.director);
+  gamescene.transScenes["menuScene"] = menuscene;
+  menuscene.transScenes["gameScene"] = gamescene;
+  dr.director.replaceScene(menuscene);
 };
 
 //this is required for outside access after code is compiled in ADVANCED_COMPILATIONS mode
