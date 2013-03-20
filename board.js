@@ -127,7 +127,7 @@ dr.Board.prototype.mouseUpEvent = function(x, y, button)
       if (this._isDown)
         {
           this._isDown = false;
-          this._strokes[this._strokes.length] = this._points.slice(); // add new copy to set
+          this._strokes.push(this._points.slice()); // add new copy to set
           drawText("Stroke #" + this._strokes.length + " recorded.");
         }
     }
@@ -260,8 +260,10 @@ dr.Board.prototype.clearBoard = function()
 
 dr.Board.prototype.undoStroke = function()
 {
-  this._strokes.splice(this._strokes.length - 1, this._strokes.length);
-  this._points.splice(this._points.length - 1, this._points.length);
+  this._strokes.pop();
+  if (this._strokes.length > 0)
+    this._points = clone(this._strokes[this._strokes.length - 1]);
+  // this._points.splice(this._points.length - 1, this._points.length);
   this.canvas.renderer.drawCanvasObject.call(window.board.canvas,window.board._g);
   this.reDraw();
 }
@@ -296,11 +298,25 @@ dr.Board.prototype.reDraw = function()
   while (i < this._strokes.length)
     {
       j = 0;
-      while (j < this._strokes[i].length - 1)
+      while (j < (this._strokes[i].length - 1))
         {
           this.drawLine(this._strokes[i][j],this._strokes[i][j+1]);
           j++;
         }
+        if (typeof this._strokes[i][0] != 'undefined')
+          {
+            this._g.fillRect(this._strokes[i][0].X, this._strokes[i][0].Y, this._g.lineWidth, this._g.lineWidth);
+          }
         i++;
     }
+}
+
+var clone = function(obj)
+{
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
 }
