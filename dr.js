@@ -6,18 +6,11 @@ goog.provide('dr');
 goog.require('lime.Director');
 goog.require('lime.Scene');
 goog.require('lime.Layer');
-goog.require('lime.GlossyButton');
-goog.require('lib');
 
 goog.require('lime');
-goog.require('lime.Sprite');
-goog.require('lime.fill.Frame');
 
 // components
-goog.require('dr.Button');
-goog.require('dr.GlossyButton');
-goog.require('dr.Board');
-goog.require('dr.Sprite');
+goog.require('lib');
 goog.require('dr.Scene');
 
 // entrypoint
