@@ -195,7 +195,8 @@ dr.Board.prototype.submit = function() {
   if (this._strokes.length > 1 || (this._strokes.length == 1 && this._strokes[0].length >= 10))
     {
       result = this._r.Recognize(this._strokes, this._isRotationInvariance, this._isSameNoStrokes, this._isProtractor);
-      drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
+      result.Score = this._isProtractor == true ? result.Score * 10 : round(result.Score,2)*100;
+      // drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
       // alert("Result: " + result.Name + " (" + round(result.Score,2) + ").");
     }
     else
@@ -282,7 +283,7 @@ dr.Board.prototype.loadAnswers = function(f)
   lib.loadjsfile(f);
   goog.events.listen($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
     console.log(fc);
-    $el.clearAnswers();
+    // $el.clearAnswers();
     var answers = window[fc]();
     while (answers.length > 0)
       {
