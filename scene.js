@@ -175,7 +175,7 @@ dr.Scene.makeGameScene = function(director) {
 
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
-    if(result["Name"] == "A" && result["Score"] > 1) {
+    if(result["Name"] == "A") {
       // do smt
     } else
       Quiz.runAction(lib.makeShakeAnimation(4));
