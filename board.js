@@ -9,8 +9,8 @@ goog.require('lib');
 dr.Board = function(x,y,w,h)
 {
     this._isRotationInvariance = false; //che do nhan biet dc ke ca khi ve nghieng
-    this._isSomeNoStrokes = false; //che do bat buoc phai ve~ so' net giong dap an
-    this._isProtractor = false; //lua chon thuat toan, true-> thuat toan protractor: nhanh hon, ko biet co chinh xac hon ko
+    this._isSameNoStrokes = false; //che do bat buoc phai ve~ so' net giong dap an
+    this._isProtractor = true; //lua chon thuat toan, true-> thuat toan protractor: nhanh hon, ko biet co chinh xac hon ko
     this._isDown = false;
 		this._points = new Array(); // point array for current stroke
 		this._strokes = new Array(); // array of point arrays
@@ -21,7 +21,7 @@ dr.Board = function(x,y,w,h)
 dr.Board.prototype.init = function()
 {
     var $el = this;
-		this._r = new NDollarRecognizer(this.isRotationInvariance);
+		this._r = new NDollarRecognizer(this._isRotationInvariance);
     var canvasDom = this.canvas.getDeepestDomElement();
     this._g = canvasDom.getContext('2d');
     this._g.lineWidth = 4;
@@ -135,7 +135,7 @@ dr.Board.prototype.mouseUpEvent = function(x, y, button)
       {
         if (this._strokes.length > 1 || (this._strokes.length == 1 && this._strokes[0].length >= 10))
           {
-            var result = this._r.Recognize(this._strokes, this.isRotationInvariance, this.isSameNoStrokes, this.isProtractor);
+            var result = this._r.Recognize(this._strokes, this._isRotationInvariance, this._isSameNoStrokes, this._isProtractor);
             drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
           }
           else
@@ -191,19 +191,21 @@ var round = function(n, d) // round 'n' to 'd' decimals
 
 dr.Board.prototype.submit = function() {
   drawText("Recognizing gesture...");
+  var result;
   if (this._strokes.length > 1 || (this._strokes.length == 1 && this._strokes[0].length >= 10))
     {
-      var result = this._r.Recognize(this._strokes, this.isRotationInvariance, this.isSameNoStrokes, this.isProtractor);
+      result = this._r.Recognize(this._strokes, this._isRotationInvariance, this._isSameNoStrokes, this._isProtractor);
       drawText("Result: " + result.Name + " (" + round(result.Score,2) + ").");
-      alert("Result: " + result.Name + " (" + round(result.Score,2) + ").");
+      // alert("Result: " + result.Name + " (" + round(result.Score,2) + ").");
     }
     else
       {
         drawText("Too little input made. Please try again.");
-        alert("Too little input made. Please try again.");
+        // alert("Too little input made. Please try again.");
       }
       this._points.length = 0; // clear and signal to clear strokes on next mousedown
-
+      console.log(result);
+      return result;
 }
 
 // function onClickAddExisting()
