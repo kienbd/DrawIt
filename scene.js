@@ -121,37 +121,78 @@ dr.Scene.makeSelectScene = function() {
 dr.Scene.makeGameScene = function(director) {
   var gamescene = new dr.Scene;
 
-  var menuBtn = dr.GlossyButton.makeGlossyButton('menu',50,30);
-  menuBtn.setPosition(0+20,0+10);
-  var remainBtn = dr.GlossyButton.makeGlossyButton('9/30',30,30);
-  remainBtn.setPosition(150,15);
+  compPosition = {
+    quizHolder: new goog.math.Coordinate(0,0),
+    menuBtn: new goog.math.Coordinate(20,10),
+    remainBtn: new goog.math.Coordinate(150,15),
+    quiz: new goog.math.Coordinate(160,110),
+    nextBtn: new goog.math.Coordinate(10,85),
+    prevBtn: new goog.math.Coordinate(290,85),
+    funcBtnHolder: new goog.math.Coordinate(0,205),
+    submitBtn: new goog.math.Coordinate(120+40,20),
+    clearBtn: new goog.math.Coordinate(60+25,10+10),
+    undoBtn: new goog.math.Coordinate(210+25,10+10),
+    board: new goog.math.Coordinate(0,250)
+  };
 
-  var QuizHolder = new lime.Layer().setPosition(0,0);
-  var Quiz = new lime.Sprite().setFill("#D62EDB");
-  Quiz.setPosition(40+120,20+90);
-  Quiz.setSize(240,180);
+  compSize = {
+    menuBtn: new goog.math.Size(50,30),
+    remainBtn: new goog.math.Size(30,30),
+    quiz: new goog.math.Size(240,180),
+    nextBtn: new goog.math.Size(20,30),
+    prevBtn: new goog.math.Size(20,30),
+    submitBtn: new goog.math.Size(80,40),
+    clearBtn: new goog.math.Size(50,30),
+    undoBtn: new goog.math.Size(50,30),
+    board: new goog.math.Size(320,220)
+
+  };
+
+  var menuBtn = dr.GlossyButton.makeGlossyButton('menu');
+  menuBtn.setSize(compSize.menuBtn);
+  menuBtn.setPosition(compPosition.menuBtn);
+
+  var remainBtn = dr.GlossyButton.makeGlossyButton('9/30');
+  remainBtn.setSize(compSize.remainBtn);
+  remainBtn.setPosition(compPosition.remainBtn);
+
+  var quizHolder = new lime.Layer();
+  quizHolder.setPosition(compPosition.quizHolder);
+
+  var quiz = new lime.Sprite().setFill("#D62EDB");
+  quiz.setPosition(compPosition.quiz);
+  quiz.setSize(compSize.quiz);
+
+  var nextBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
+  nextBtn.setSize(compSize.nextBtn).setPosition(compPosition.nextBtn);
+  var prevBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
+  prevBtn.setSize(compSize.prevBtn).setPosition(compPosition.prevBtn);
 
   var qsprite = new lime.Sprite().setFill("#8D2EDB").setAnchorPoint(0,0);
   qsprite.setSize(320,200);
 
-  QuizHolder.appendChild(qsprite);
-  QuizHolder.appendChild(Quiz);
-  QuizHolder.appendChild(menuBtn);
-  QuizHolder.appendChild(remainBtn);
+  quizHolder.appendChild(qsprite);
+  quizHolder.appendChild(quiz);
+  quizHolder.appendChild(menuBtn);
+  quizHolder.appendChild(remainBtn);
+  quizHolder.appendChild(nextBtn);
+  quizHolder.appendChild(prevBtn);
 
-  gamescene.appendChild(QuizHolder);
+  gamescene.appendChild(quizHolder);
 
 
-  var funcBtnHolder = new lime.Layer().setPosition(0,205);
+  var funcBtnHolder = new lime.Layer();
+  funcBtnHolder.setPosition(compPosition.funcBtnHolder);
+
   fsprite = new lime.Sprite().setFill('#1BE0B5').setAnchorPoint(0,0);
   fsprite.setSize(320,40);
 
   var submitBtn = dr.GlossyButton.makeGlossyButton("SUBMIT",80,40);
-  submitBtn.setPosition(120 + 40,20);
+  submitBtn.setPosition(compPosition.submitBtn);
   var clearBtn = dr.GlossyButton.makeGlossyButton("CLEAR",50,30);
-  clearBtn.setPosition(60+25,10+ 10);
+  clearBtn.setPosition(compPosition.clearBtn);
   var undoBtn = dr.GlossyButton.makeGlossyButton("UNDO",50,30);
-  undoBtn.setPosition(185 + 50,10+ 10);
+  undoBtn.setPosition(compPosition.undoBtn);
 
 
   funcBtnHolder.appendChild(fsprite);
@@ -175,10 +216,12 @@ dr.Scene.makeGameScene = function(director) {
 
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
-    if(result["Name"] == "A") {
-      // do smt
-    } else
-      Quiz.runAction(lib.makeShakeAnimation(4));
+    if(typeof result != "undefined") {
+      if(result["Name"] == "A" && result["Score"] > 2) {
+        // do smt
+      } else
+        quiz.runAction(lib.makeShakeAnimation(10));
+    }
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
     board.clearBoard();
