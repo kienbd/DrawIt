@@ -15,10 +15,13 @@ goog.require('dr.Scene');
 
 // entrypoint
 
+dr.WIDTH = 320;
+dr.HEIGHT = 480;
+
 dr.start = function(){
     //director
   dr.director = new lime.Director(document.body);
-  dr.director.setSize(320,480);
+  dr.director.setSize(dr.WIDTH,dr.HEIGHT);
   dr.director.makeMobileWebAppCapable();
 
   var gamescene = dr.Scene.makeGameScene(dr.director);

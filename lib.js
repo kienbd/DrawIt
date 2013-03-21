@@ -56,28 +56,26 @@ lib.makeShakeAnimation = function(opt) {
   aniC = [];
   var agl = -0.2;
   totalFrame = 10;
-  for(i=0;i<totalFrame-1;i++) {
-    if(i%2 ==0 ) {
+  for(i=0;i<totalFrame-1;i = i+2) {
+    if(i%4 ==0 ) {
       aniM[i] = new lime.animation.MoveBy(opt,0);
       aniR[i] = new lime.animation.RotateTo(agl);
+      aniM[i+1] = new lime.animation.MoveBy(opt*-1,0);
     }
     else {
       aniM[i] = new lime.animation.MoveBy(opt*-1,0);
       aniR[i] = new lime.animation.RotateTo(-agl);
+      aniM[i+1] = new lime.animation.MoveBy(opt,0);
     }
     aniM[i].setDuration(0.05);
+    aniM[i+1].setDuration(0.05);
     aniR[i].setDuration(0.05);
     aniC[i] = new lime.animation.Spawn(aniM[i],aniR[i]);
+    aniC[i+1] = new lime.animation.Spawn(aniM[i+1],aniR[i]);
+    console.log(i);
   }
 
-  safe_aniR = new lime.animation.RotateTo(0).setDuration(0.01);
-  if(totalFrame %2 ==0)
-    safe_aniM = new lime.animation.MoveBy(opt*-1,0).setDuration(0.05);
-  else
-    safe_aniM = new lime.animation.MoveBy(opt).setDuration(0.05);
-  safe_aniC = new lime.animation.Spawn(safe_aniR,safe_aniM);
 
-  aniC.push(safe_aniC);
   var true_ani = new lime.animation.Sequence(aniC);
   return true_ani;
 };

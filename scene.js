@@ -36,17 +36,31 @@ goog.inherits(dr.Scene,lime.Scene);
 dr.Scene.prototype.id = "dr.scene";
 
 dr.Scene.makeMenuScene = function(director) {
+
+  var comPosition = {
+    logo: new goog.math.Coordinate(0,0),
+    btnHolder: new goog.math.Coordinate(0,160),
+    playBtn: new goog.math.Coordinate(80,10),
+    shopBtn: new goog.math.Coordinate(80,80),
+    highscoreBtn: new goog.math.Coordinate(80,150),
+    settingBtn: new goog.math.Coordinate(80,220)
+  };
+
+  var comSize = {
+    logo: new goog.math.Size(320,160),
+    menuBtn: new goog.math.Size(160,60)
+  };
   var menuScene = new dr.Scene;
 
   var logoHolder = new lime.Layer();
   logo = new lime.Sprite();
   logo.setFill('#DE8509').setAnchorPoint(0,0);
-  logo.setSize(320,160);
+  logo.setSize(comSize.logo);
 
   logoHolder.appendChild(logo);
 
 
-  var btnHolder = new lime.Layer().setPosition(0,160);
+  var btnHolder = new lime.Layer().setPosition(comPosition.btnHolder);
   btns = new lime.Sprite();
   btns.setFill('#9E05A6').setAnchorPoint(0,0);
   btns.setSize(320,300);
@@ -54,23 +68,23 @@ dr.Scene.makeMenuScene = function(director) {
 
   var playBtn = new lime.Sprite();
   playBtn.setFill('#97DE09').setAnchorPoint(0,0);
-  playBtn.setSize(160,60);
-  playBtn.setPosition(80,10);
+  playBtn.setSize(comSize.menuBtn);
+  playBtn.setPosition(comPosition.playBtn);
 
   var shopBtn = new lime.Sprite();
   shopBtn.setFill('#97DE09').setAnchorPoint(0,0);
-  shopBtn.setSize(160,60);
-  shopBtn.setPosition(80,80)
+  shopBtn.setSize(comSize.menuBtn);
+  shopBtn.setPosition(comPosition.shopBtn)
 
   var highscoreBtn = new lime.Sprite();
   highscoreBtn.setFill('#97DE09').setAnchorPoint(0,0);
-  highscoreBtn.setSize(160,60);
-  highscoreBtn.setPosition(80,150)
+  highscoreBtn.setSize(comSize.menuBtn);
+  highscoreBtn.setPosition(comPosition.highscoreBtn)
 
   var settingBtn = new lime.Sprite();
   settingBtn.setFill('#97DE09').setAnchorPoint(0,0);
-  settingBtn.setSize(160,60);
-  settingBtn.setPosition(80,220);
+  settingBtn.setSize(comSize.menuBtn);
+  settingBtn.setPosition(comPosition.settingBtn);
 
   btnHolder.appendChild(btns);
   btnHolder.appendChild(playBtn);
@@ -82,6 +96,7 @@ dr.Scene.makeMenuScene = function(director) {
   menuScene.appendChild(logoHolder);
   menuScene.appendChild(btnHolder);
 
+
   lib.setEvent(playBtn,['touchstart','mousedown'],function(){
     director.replaceScene(menuScene.transScenes["selectScene"]);
   });
@@ -90,8 +105,10 @@ dr.Scene.makeMenuScene = function(director) {
     director.replaceScene(menuScene.transScenes["gameScene"],lime.transitions.SlideInRight,0.7);
 
     gamescene = menuScene.transScenes["gameScene"];
-    if(!gamescene.hasBoard)
+    if(!gamescene.hasBoard) {
       gamescene.boardHolder.appendChild(board.canvas);
+      gamescene.hasBoard = true;
+    }
 
     board.loadAnswers('assets/answers/answer1.js');
   });
@@ -121,7 +138,7 @@ dr.Scene.makeSelectScene = function() {
 dr.Scene.makeGameScene = function(director) {
   var gamescene = new dr.Scene;
 
-  compPosition = {
+  var comPosition = {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(20,10),
     remainBtn: new goog.math.Coordinate(150,15),
@@ -135,7 +152,7 @@ dr.Scene.makeGameScene = function(director) {
     board: new goog.math.Coordinate(0,250)
   };
 
-  compSize = {
+  var comSize = {
     menuBtn: new goog.math.Size(50,30),
     remainBtn: new goog.math.Size(30,30),
     quiz: new goog.math.Size(240,180),
@@ -149,24 +166,24 @@ dr.Scene.makeGameScene = function(director) {
   };
 
   var menuBtn = dr.GlossyButton.makeGlossyButton('menu');
-  menuBtn.setSize(compSize.menuBtn);
-  menuBtn.setPosition(compPosition.menuBtn);
+  menuBtn.setSize(comSize.menuBtn);
+  menuBtn.setPosition(comPosition.menuBtn);
 
   var remainBtn = dr.GlossyButton.makeGlossyButton('9/30');
-  remainBtn.setSize(compSize.remainBtn);
-  remainBtn.setPosition(compPosition.remainBtn);
+  remainBtn.setSize(comSize.remainBtn);
+  remainBtn.setPosition(comPosition.remainBtn);
 
   var quizHolder = new lime.Layer();
-  quizHolder.setPosition(compPosition.quizHolder);
+  quizHolder.setPosition(comPosition.quizHolder);
 
   var quiz = new lime.Sprite().setFill("#D62EDB");
-  quiz.setPosition(compPosition.quiz);
-  quiz.setSize(compSize.quiz);
+  quiz.setPosition(comPosition.quiz);
+  quiz.setSize(comSize.quiz);
 
   var nextBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
-  nextBtn.setSize(compSize.nextBtn).setPosition(compPosition.nextBtn);
+  nextBtn.setSize(comSize.nextBtn).setPosition(comPosition.nextBtn);
   var prevBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
-  prevBtn.setSize(compSize.prevBtn).setPosition(compPosition.prevBtn);
+  prevBtn.setSize(comSize.prevBtn).setPosition(comPosition.prevBtn);
 
   var qsprite = new lime.Sprite().setFill("#8D2EDB").setAnchorPoint(0,0);
   qsprite.setSize(320,200);
@@ -182,17 +199,17 @@ dr.Scene.makeGameScene = function(director) {
 
 
   var funcBtnHolder = new lime.Layer();
-  funcBtnHolder.setPosition(compPosition.funcBtnHolder);
+  funcBtnHolder.setPosition(comPosition.funcBtnHolder);
 
   fsprite = new lime.Sprite().setFill('#1BE0B5').setAnchorPoint(0,0);
   fsprite.setSize(320,40);
 
   var submitBtn = dr.GlossyButton.makeGlossyButton("SUBMIT",80,40);
-  submitBtn.setPosition(compPosition.submitBtn);
+  submitBtn.setPosition(comPosition.submitBtn);
   var clearBtn = dr.GlossyButton.makeGlossyButton("CLEAR",50,30);
-  clearBtn.setPosition(compPosition.clearBtn);
+  clearBtn.setPosition(comPosition.clearBtn);
   var undoBtn = dr.GlossyButton.makeGlossyButton("UNDO",50,30);
-  undoBtn.setPosition(compPosition.undoBtn);
+  undoBtn.setPosition(comPosition.undoBtn);
 
 
   funcBtnHolder.appendChild(fsprite);
@@ -217,11 +234,12 @@ dr.Scene.makeGameScene = function(director) {
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
     if(typeof result != "undefined") {
-      if(result["Name"] == "A" && result["Score"] > 2) {
+      if(result["Name"] == "A" && result["Score"] > 90) {
         // do smt
       } else
-        quiz.runAction(lib.makeShakeAnimation(10));
+      quiz.runAction(lib.makeShakeAnimation(6));
     }
+      quiz.setPosition(comPosition.quiz);
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
     board.clearBoard();
