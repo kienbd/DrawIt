@@ -25,7 +25,6 @@ dr.start = function(){
   dr.director.setSize(dr.WIDTH,dr.HEIGHT);
   dr.director.makeMobileWebAppCapable();
 
-
   var loadingscene = new lime.Scene();
   loadingLayer = new lime.Layer();
   loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
@@ -48,6 +47,13 @@ dr.start = function(){
 
   lime.scheduleManager.callAfter(function() {
     var menuscene = dr.Scene.makeMenuScene(dr.director);
+    var selectscene = dr.Scene.makeSelectScene(dr.director);
+    var gamescene = dr.Scene.makeGameScene(dr.director);
+    gamescene.transScenes["menuScene"] = menuscene;
+    gamescene.transScenes["selectScene"] = selectscene;
+    menuscene.transScenes["selectScene"] = selectscene;
+    selectscene.transScenes["menuScene"] = menuscene;
+    selectscene.transScenes["gameScene"] = gamescene;
     dr.director.replaceScene(menuscene);
   },dr.director,3000);
 

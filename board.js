@@ -15,7 +15,6 @@ dr.Board = function(x,y,w,h)
 		this._points = new Array(); // point array for current stroke
 		this._strokes = new Array(); // array of point arrays
     this.canvas = new lime.Sprite().setPosition(x,y).setSize(w,h).setFill('assets/play/board.png').setAnchorPoint(0,0).setRenderer(lime.Renderer.CANVAS);
-    window.board = this;
 }
 
 dr.Board.prototype.init = function()

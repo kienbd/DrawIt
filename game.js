@@ -13,7 +13,6 @@ dr.Game = function(packName) {
   this.currentID = 0;
   this.solvedQuizzes = [];
   this.answers = "assets/" +packName + "/answers" + ".js";
-  window.a = this;
 };
 
 
