@@ -1,4 +1,4 @@
-var answer1 = function() //must be same as file name
+var answers = function() //must be same as file name
 {
   var answers = new Array();
 

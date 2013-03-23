@@ -10,7 +10,7 @@ dr.Board = function(x,y,w,h)
 {
     this._isRotationInvariance = false; //che do nhan biet dc ke ca khi ve nghieng
     this._isSameNoStrokes = false; //che do bat buoc phai ve~ so' net giong dap an
-    this._isProtractor = true; //lua chon thuat toan, true-> thuat toan protractor: nhanh hon, ko biet co chinh xac hon ko
+    this._isProtractor = false; //lua chon thuat toan, true-> thuat toan protractor: nhanh hon, ko biet co chinh xac hon ko
     this._isDown = false;
 		this._points = new Array(); // point array for current stroke
 		this._strokes = new Array(); // array of point arrays
@@ -253,6 +253,7 @@ dr.Board.prototype.submit = function() {
 dr.Board.prototype.clearBoard = function()
 {
   this._points.length = 0; // clear and signal to clear strokes on next mousedown
+  this._strokes.length = 0; //clear
   this._g.clearRect(0, 0, this._rc.clientWidth, this._rc.clientHeight);
   // this._g.save();
   this.canvas.renderer.drawCanvasObject.call(this.canvas,this._g);

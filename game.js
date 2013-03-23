@@ -1,7 +1,7 @@
 goog.provide('dr.Game');
 
-
 goog.require('lime');
+goog.require('dr.Quiz');
 
 dr.Game = function(packName) {
   this.allQuiz = [];
@@ -12,6 +12,8 @@ dr.Game = function(packName) {
   this.totalQuiz = dr.Game.QUIZNUM;
   this.currentID = 0;
   this.solvedQuizzes = [];
+  this.answers = "assets/" +packName + "/answers" + ".js";
+  window.a = this;
 };
 
 
@@ -23,11 +25,13 @@ dr.Game.prototype.changeQuiz = function(i) {
 
 
 dr.Game.prototype.nextQuiz = function() {
-  this.currentID++;
+  if (this.currentID < dr.Game.QUIZNUM - 1)
+    this.currentID++;
 };
 
 dr.Game.prototype.prevQuiz = function() {
-  this.currentID--;
+  if (this.currentID > 0)
+    this.currentID--;
 };
 
 dr.Game.prototype.currentQuiz = function() {
