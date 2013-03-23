@@ -8,6 +8,7 @@ dr.Button = function(sprite_sheet,w,h) {
   up_state = new lime.Sprite().setFill(new lime.fill.Frame(sprite_sheet,0,0,w,h));
   down_state = new lime.Sprite().setFill(new lime.fill.Frame(sprite_sheet,0,h,w,h));
   lime.Button.call(this,up_state,down_state);
+  this.setAnchorPoint(0,0);
   this.clickStatus = "avail";
 }
 

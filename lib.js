@@ -52,31 +52,24 @@ lib.setEvent = function(context,event,callback) {
 
 lib.makeShakeAnimation = function(opt) {
   aniM = [];
-  aniR = [];
   aniC = [];
-  var agl = -0.2;
-  totalFrame = 10;
+  totalFrame = 30;
   for(i=0;i<totalFrame-1;i = i+2) {
     if(i%4 ==0 ) {
-      aniM[i] = new lime.animation.MoveBy(opt,0);
-      aniR[i] = new lime.animation.RotateTo(agl);
-      aniM[i+1] = new lime.animation.MoveBy(opt*-1,0);
+      aniM[i] = new lime.animation.MoveBy(opt,0).enableOptimizations();
+      aniM[i+1] = new lime.animation.MoveBy(opt*-1,0).enableOptimizations();
     }
     else {
-      aniM[i] = new lime.animation.MoveBy(opt*-1,0);
-      aniR[i] = new lime.animation.RotateTo(-agl);
-      aniM[i+1] = new lime.animation.MoveBy(opt,0);
+      aniM[i] = new lime.animation.MoveBy(opt*-1,0).enableOptimizations();
+      aniM[i+1] = new lime.animation.MoveBy(opt,0).enableOptimizations();
     }
-    aniM[i].setDuration(0.05);
-    aniM[i+1].setDuration(0.05);
-    aniR[i].setDuration(0.05);
-    aniC[i] = new lime.animation.Spawn(aniM[i],aniR[i]);
-    aniC[i+1] = new lime.animation.Spawn(aniM[i+1],aniR[i]);
+    aniM[i].setDuration(0.01);
+    aniM[i+1].setDuration(0.01);
     console.log(i);
   }
 
 
-  var true_ani = new lime.animation.Sequence(aniC);
+  var true_ani = new lime.animation.Sequence(aniM).enableOptimizations();
   return true_ani;
 };
 

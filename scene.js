@@ -41,10 +41,9 @@ dr.Scene.makeMenuScene = function(director) {
   var comPosition = {
     logo: new goog.math.Coordinate(0,0),
     btnHolder: new goog.math.Coordinate(0,160),
-    playBtn: new goog.math.Coordinate(80,10),
-    shopBtn: new goog.math.Coordinate(80,80),
-    highscoreBtn: new goog.math.Coordinate(80,150),
-    settingBtn: new goog.math.Coordinate(80,220)
+    playBtn: new goog.math.Coordinate(80,20),
+    shopBtn: new goog.math.Coordinate(80,120),
+    settingBtn: new goog.math.Coordinate(80,230)
   };
 
   var comSize = {
@@ -55,52 +54,36 @@ dr.Scene.makeMenuScene = function(director) {
 
   var logoHolder = new lime.Layer();
   logo = new lime.Sprite();
-  logo.setFill('#DE8509').setAnchorPoint(0,0);
+  logo.setFill('assets/menu/logo.png').setAnchorPoint(0,0);
   logo.setSize(comSize.logo);
 
   logoHolder.appendChild(logo);
 
-
   var btnHolder = new lime.Layer().setPosition(comPosition.btnHolder);
-  btns = new lime.Sprite();
-  btns.setFill('#9E05A6').setAnchorPoint(0,0);
-  btns.setSize(320,300);
-  btns.setPosition(0,0);
 
   var playBtn = new lime.Sprite();
-  playBtn.setFill('#97DE09').setAnchorPoint(0,0);
+  playBtn.setFill('assets/menu/playBtn.png').setAnchorPoint(0,0);
   playBtn.setSize(comSize.menuBtn);
   playBtn.setPosition(comPosition.playBtn);
 
   var shopBtn = new lime.Sprite();
-  shopBtn.setFill('#97DE09').setAnchorPoint(0,0);
+  shopBtn.setFill('assets/menu/shopBtn.png').setAnchorPoint(0,0);
   shopBtn.setSize(comSize.menuBtn);
   shopBtn.setPosition(comPosition.shopBtn)
 
-  var highscoreBtn = new lime.Sprite();
-  highscoreBtn.setFill('#97DE09').setAnchorPoint(0,0);
-  highscoreBtn.setSize(comSize.menuBtn);
-  highscoreBtn.setPosition(comPosition.highscoreBtn)
-
   var settingBtn = new lime.Sprite();
-  settingBtn.setFill('#97DE09').setAnchorPoint(0,0);
+  settingBtn.setFill('assets/menu/settingBtn.png').setAnchorPoint(0,0);
   settingBtn.setSize(comSize.menuBtn);
   settingBtn.setPosition(comPosition.settingBtn);
 
-  btnHolder.appendChild(btns);
   btnHolder.appendChild(playBtn);
   btnHolder.appendChild(shopBtn);
-  btnHolder.appendChild(highscoreBtn);
   btnHolder.appendChild(settingBtn);
 
 
   menuScene.appendChild(logoHolder);
   menuScene.appendChild(btnHolder);
 
-
-  lib.setEvent(playBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["selectScene"]);
-  });
 
   goog.events.listen(playBtn,['touchstart','mousedown'],function() {
     selectScene = dr.Scene.makeSelectScene(director);
@@ -111,10 +94,6 @@ dr.Scene.makeMenuScene = function(director) {
 
   lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
     director.replaceScene(menuScene.transScenes["shopScene"]);
-  });
-
-  lib.setEvent(highscoreBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["highscoreScene"]);
   });
 
   lib.setEvent(settingBtn,['touchstart','mousedown'],function(){
@@ -216,58 +195,51 @@ dr.Scene.makeGameScene = function(director) {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(20,10),
     remainBtn: new goog.math.Coordinate(150,15),
-    quiz: new goog.math.Coordinate(16,10),
-    prevBtn: new goog.math.Coordinate(10,85),
-    nextBtn: new goog.math.Coordinate(310,85),
+    quiz: new goog.math.Coordinate(40,30),
+    prevBtn: new goog.math.Coordinate(10,105),
+    nextBtn: new goog.math.Coordinate(290,105),
     funcBtnHolder: new goog.math.Coordinate(0,205),
-    submitBtn: new goog.math.Coordinate(120+40,20),
-    clearBtn: new goog.math.Coordinate(60+25,10+10),
-    undoBtn: new goog.math.Coordinate(210+25,10+10),
+    submitBtn: new goog.math.Coordinate(120,20),
+    clearBtn: new goog.math.Coordinate(60,10+10),
+    undoBtn: new goog.math.Coordinate(210,10+10),
     board: new goog.math.Coordinate(0,250)
   };
 
   var comSize = {
     menuBtn: new goog.math.Size(50,30),
     remainBtn: new goog.math.Size(30,30),
-    quiz: new goog.math.Size(290,180),
+    quiz: new goog.math.Size(240,180),
     nextBtn: new goog.math.Size(20,30),
     prevBtn: new goog.math.Size(20,30),
     submitBtn: new goog.math.Size(80,40),
     clearBtn: new goog.math.Size(50,30),
     undoBtn: new goog.math.Size(50,30),
     board: new goog.math.Size(320,220)
-
   };
 
-  var menuBtn = dr.GlossyButton.makeGlossyButton('menu');
+  var menuBtn = new lime.Sprite();
+  menuBtn.setFill('assets/play/menuBtn.png');
   menuBtn.setSize(comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
 
-  var remainBtn = dr.GlossyButton.makeGlossyButton('9/30');
+  var remainBtn = new lime.Sprite();
+  remainBtn.setFill('assets/play/remain.png');
   remainBtn.setSize(comSize.remainBtn);
   remainBtn.setPosition(comPosition.remainBtn);
 
   var quizHolder = new lime.Layer();
   quizHolder.setPosition(comPosition.quizHolder);
 
-  // var nextBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
-  // nextBtn.setSize(comSize.nextBtn).setPosition(comPosition.nextBtn);
-  // var prevBtn = new lime.Sprite().setFill("#ADADDA").setAnchorPoint(0,0);
-  // prevBtn.setSize(comSize.prevBtn).setPosition(comPosition.prevBtn);
+  var nextBtn = new lime.Sprite().setFill("assets/play/nextBtn.png").setAnchorPoint(0,0);
+  nextBtn.setSize(comSize.nextBtn).setPosition(comPosition.nextBtn);
+  var prevBtn = new lime.Sprite().setFill("assets/play/prevBtn.png").setAnchorPoint(0,0);
+  prevBtn.setSize(comSize.prevBtn).setPosition(comPosition.prevBtn);
 
-  var quiz = new lime.Sprite().setFill(game.currentQuiz().getQuestionFrame()).setAnchorPoint(0,0);
+  var quiz = new lime.Sprite().setAnchorPoint(0,0);
+  quiz.setFill(game.currentQuiz().getQuestionFrame());
   quiz.setPosition(comPosition.quiz);
   quiz.setSize(comSize.quiz);
 
-  var nextBtn = dr.GlossyButton.makeGlossyButton("n",comSize.nextBtn.width,comSize.nextBtn.height);
-  nextBtn.setPosition(comPosition.nextBtn);
-  var prevBtn = dr.GlossyButton.makeGlossyButton("p",comSize.prevBtn.width,comSize.prevBtn.height);
-  prevBtn.setPosition(comPosition.prevBtn);
-
-  var qsprite = new lime.Sprite().setFill("#8D2EDB").setAnchorPoint(0,0);
-  qsprite.setSize(320,200);
-
-  quizHolder.appendChild(qsprite);
   quizHolder.appendChild(quiz);
   quizHolder.appendChild(menuBtn);
   quizHolder.appendChild(remainBtn);
@@ -280,18 +252,22 @@ dr.Scene.makeGameScene = function(director) {
   var funcBtnHolder = new lime.Layer();
   funcBtnHolder.setPosition(comPosition.funcBtnHolder);
 
-  fsprite = new lime.Sprite().setFill('#1BE0B5').setAnchorPoint(0,0);
-  fsprite.setSize(320,40);
-
-  var submitBtn = dr.GlossyButton.makeGlossyButton("SUBMIT",80,40);
+  var submitBtn = new lime.Sprite().setFill('assets/play/submitBtn.png').setAnchorPoint(0,0);
+  submitBtn.setSize(comSize.submitBtn);
   submitBtn.setPosition(comPosition.submitBtn);
-  var clearBtn = dr.GlossyButton.makeGlossyButton("CLEAR",50,30);
+  var clearBtn = new lime.Sprite().setFill('assets/play/clearBtn.png').setAnchorPoint(0,0);
+  clearBtn.setSize(comSize.clearBtn);
   clearBtn.setPosition(comPosition.clearBtn);
-  var undoBtn = dr.GlossyButton.makeGlossyButton("UNDO",50,30);
+  var undoBtn = new lime.Sprite().setFill('assets/play/undoBtn.png').setAnchorPoint(0,0);
+  undoBtn.setSize(comSize.undoBtn);
   undoBtn.setPosition(comPosition.undoBtn);
 
 
-  funcBtnHolder.appendChild(fsprite);
+  submitBtn.clickStatus = "avail";
+  clearBtn.clickStatus = "avail";
+  undoBtn.clickStatus = "avail";
+
+
   funcBtnHolder.appendChild(submitBtn);
   funcBtnHolder.appendChild(clearBtn);
   funcBtnHolder.appendChild(undoBtn);
@@ -299,7 +275,7 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.appendChild(funcBtnHolder);
 
   var boardHolder = new lime.Layer();
-  var board = new dr.Board(0,250,320,220);
+  var board = new dr.Board(0,270,320,200);
   gamescene.boardHolder = boardHolder;
   // gamescene.hasBoard = false;
   boardHolder.appendChild(board.canvas);
@@ -309,6 +285,11 @@ dr.Scene.makeGameScene = function(director) {
   });
 
   gamescene.appendChild(boardHolder);
+
+  var shakeAni = lib.makeShakeAnimation(10);
+  goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
+    quiz.setPosition(comPosition.quiz);
+  });
 
   lib.setEvent(nextBtn,['touchstart','mousedown'],function() {
     game.nextQuiz();
@@ -327,9 +308,8 @@ dr.Scene.makeGameScene = function(director) {
         game.solveCurrentQuiz();
         refreshQuizFrame();
       } else
-      quiz.runAction(lib.makeShakeAnimation(6));
+      quiz.runAction(shakeAni);
     }
-      quiz.setPosition(comPosition.quiz);
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
     board.clearBoard();
@@ -339,7 +319,7 @@ dr.Scene.makeGameScene = function(director) {
     refreshUndoButton();
   });
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
+    director.replaceScene(gamescene.transScenes['selectScene'],lime.transitions.SlideIn,0.7);
   })
   lib.setEvent(remainBtn,['touchstart','mousedown'],function() {
 
