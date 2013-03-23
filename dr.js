@@ -26,8 +26,11 @@ dr.start = function(){
 
   var gamescene = dr.Scene.makeGameScene(dr.director);
   var menuscene = dr.Scene.makeMenuScene(dr.director);
+  var selectscene = dr.Scene.makeSelectScene(dr.director);
   gamescene.transScenes["menuScene"] = menuscene;
-  menuscene.transScenes["gameScene"] = gamescene;
+  menuscene.transScenes["selectScene"] = selectscene;
+  selectscene.transScenes["menuScene"] = menuscene;
+  selectscene.transScenes["gameScene"] = gamescene;
   dr.director.replaceScene(menuscene);
 };
 

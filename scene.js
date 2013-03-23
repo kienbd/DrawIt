@@ -102,15 +102,7 @@ dr.Scene.makeMenuScene = function(director) {
   });
 
   goog.events.listen(playBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(menuScene.transScenes["gameScene"],lime.transitions.SlideInRight,0.7);
-
-    gamescene = menuScene.transScenes["gameScene"];
-    if(!gamescene.hasBoard) {
-      gamescene.boardHolder.appendChild(board.canvas);
-      gamescene.hasBoard = true;
-    }
-
-    board.loadAnswers('assets/answers/answer1.js');
+    director.replaceScene(menuScene.transScenes["selectScene"],lime.transitions.SlideInRight,0.7);
   });
 
   lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
@@ -129,10 +121,91 @@ dr.Scene.makeMenuScene = function(director) {
 
 };
 
-dr.Scene.makeSelectScene = function() {
+dr.Scene.makeSelectScene = function(director) {
 
   var selectscene = new dr.Scene();
 
+  var comPosition = {
+    topLayer: new goog.math.Coordinate(0,0),
+    lbl: new goog.math.Coordinate(160,10),
+    packHolder: new goog.math.Coordinate(0,40),
+    funcBtn: new goog.math.Coordinate(0,420),
+    pack1: new goog.math.Coordinate(15,20),
+    pack2: new goog.math.Coordinate(115,20),
+    pack3: new goog.math.Coordinate(215,20),
+    goBtn: new goog.math.Coordinate(240,10),
+    backBtn: new goog.math.Coordinate(20,10)
+  };
+
+  var comSize = {
+    pack: new goog.math.Size(90,70),
+    goBtn: new goog.math.Size(60,40),
+    backBtn: new goog.math.Size(60,40)
+  };
+
+  topLayer = new lime.Layer().setPosition(0,0);
+
+  packHolder = new lime.Layer().setPosition(0,40);
+
+  funcBtn = new lime.Layer().setPosition(0,420);
+
+  var lbl = new lime.Label().setText('PLAY').setFontFamily('Verdana').
+    setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(160,20);
+  lbl.setPosition(comPosition.lbl);
+
+  topLayer.appendChild(lbl);
+
+  pack1 = new lime.Sprite().setAnchorPoint(0,0);
+  pack1.setFill('#D6AE81').setPosition(comPosition.pack1).setSize(comSize.pack);
+
+  pack2 = new lime.Sprite().setAnchorPoint(0,0);
+  pack2.setFill('#D5ADE1').setPosition(comPosition.pack2).setSize(comSize.pack);
+
+  pack3 = new lime.Sprite().setAnchorPoint(0,0);
+  pack3.setFill('#DEA10F').setPosition(comPosition.pack3).setSize(comSize.pack);
+
+  psprite = new lime.Sprite().setAnchorPoint(0,0);
+  psprite.setFill('#DEEAFA').setPosition(0,0).setSize(320,380);
+
+  packHolder.appendChild(psprite);
+  packHolder.appendChild(pack1);
+  packHolder.appendChild(pack2);
+  packHolder.appendChild(pack3);
+
+  goBtn = new lime.Sprite().setAnchorPoint(0,0);
+  goBtn.setFill("#DADADF").setPosition(comPosition.goBtn).setSize(comSize.goBtn);
+  backBtn = new lime.Sprite().setAnchorPoint(0,0);
+  backBtn.setFill("#DADADF").setPosition(comPosition.backBtn).setSize(comSize.backBtn);
+
+  fsprite = new lime.Sprite().setAnchorPoint(0,0);
+  fsprite.setFill('#F0F6F1').setPosition(0,0).setSize(320,60);
+
+  funcBtn.appendChild(fsprite);
+  funcBtn.appendChild(goBtn);
+  funcBtn.appendChild(backBtn);
+
+  selectscene.appendChild(topLayer);
+  selectscene.appendChild(packHolder);
+  selectscene.appendChild(funcBtn);
+
+
+  goog.events.listen(goBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(selectscene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
+
+    gamescene = selectscene.transScenes["gameScene"];
+    if(!gamescene.hasBoard) {
+      gamescene.boardHolder.appendChild(board.canvas);
+      gamescene.hasBoard = true;
+    }
+
+    board.loadAnswers('assets/answers/answer1.js');
+  });
+
+  goog.events.listen(backBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(selectscene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
+  });
+
+  return selectscene;
 };
 
 dr.Scene.makeGameScene = function(director) {
@@ -261,9 +334,5 @@ dr.Scene.makeSettingScene = function() {
 };
 
 dr.Scene.makeShopScene = function() {
-
-};
-
-dr.Scene.makeHighScoreScene = function() {
 
 };
