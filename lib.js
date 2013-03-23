@@ -73,4 +73,19 @@ lib.makeShakeAnimation = function(opt) {
   return true_ani;
 };
 
+lib.setBackground = function(bkg_url,w,h) {
+var css = 'body { background-image: url(' + bkg_url + ');' + 'background-repeat: no-repeat;background-position: 0 0;' + 'background-size: ' + w + 'px '+ h + 'px;',
+    head = document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+  style.type = 'text/css';
+  if (style.styleSheet){
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+
+
+  head.appendChild(style);
+}
 
