@@ -231,6 +231,10 @@ dr.Scene.makeGameScene = function(director) {
     setFontColor('#BA9F27').setFontSize(26).setFontWeight('bold').setSize(40,30);
   lbl.setPosition(250,15);
 
+  var remain = new lime.Label().setText('3/3').setFontFamily('Verdana').
+    setFontColor('#807226').setFontSize(26).setFontWeight('bold').setSize(40,30);
+  remain.setPosition(160,20);
+
   var star = new lime.Sprite();
   star.setFill('assets/play/star.png');
   star.setSize(comSize.star);
@@ -262,6 +266,7 @@ dr.Scene.makeGameScene = function(director) {
   quizHolder.appendChild(lbl);
   quizHolder.appendChild(nextBtn);
   quizHolder.appendChild(prevBtn);
+  quizHolder.appendChild(remain);
 
   gamescene.appendChild(quizHolder);
 
@@ -295,6 +300,15 @@ dr.Scene.makeGameScene = function(director) {
   });
 
   gamescene.appendChild(boardHolder);
+
+  var popupHolder = new lime.Layer();
+  popupHolder.setPosition(5,25);
+  var popup = new lime.Sprite().setAnchorPoint(0,0);
+  popup.setFill('assets/popup.png');
+  popup.setSize(310,250).setPosition(0,0);
+  popup.setScale(0);
+  popupHolder.appendChild(popup);
+  gamescene.appendChild(popupHolder);
 
   var shakeAni = lib.makeShakeAnimation(10);
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
@@ -351,6 +365,15 @@ dr.Scene.makeGameScene = function(director) {
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
   });
+
+  goog.events.listen(remain,['touchstart','mousedown'],function() {
+    if(popup.getScale().x == 0) {
+      popup.setScale(1);
+    } else {
+      popup.setScale(0);
+    }
+  })
+
 
   // just refresh without any action
   var refreshScene = function()
