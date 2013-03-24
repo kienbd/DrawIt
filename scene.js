@@ -380,11 +380,12 @@ dr.Scene.makeGameScene = function(director) {
         row = Math.floor(i/3);
         pack.setFill('assets/play/frame.png').setSize(comSize.pack);
         pack.setPosition(10+(comSize.pack.width+10)*col,20+(comSize.pack.height+15)*row);
-        q.setSize(60,50);
-        console.log(q);
-        q.setPosition(15+(comSize.pack.width+10)*col,10+(comSize.pack.height+15)*row);
+        console.log(q.getQuestionFrame());
+        q_image = new lime.Sprite().setAnchorPoint(0,0);
+        q_image.setSize(60,50).setFill(q.getQuestionFrame());
+        // q_image.setPosition(15+(comSize.pack.width+10)*col,10+(comSize.pack.height+15)*row);
         popup.appendChild(pack);
-        pack.appendChild(q);
+        pack.appendChild(q_image);
       });
 
     } else {
