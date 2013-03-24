@@ -236,8 +236,6 @@ dr.Scene.makeGameScene = function(director) {
     setFontColor('#807226').setFontSize(26).setFontWeight('bold').setSize(40,30);
   remain.setPosition(160,20);
 
-  remain.quizLeft = 4;
-
   var star = new lime.Sprite();
   star.setFill('assets/play/star.png');
   star.setSize(comSize.star);
@@ -305,10 +303,12 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.appendChild(boardHolder);
 
   var popupHolder = new lime.Layer();
-  popupHolder.setPosition(5,25);
+  popupHolder.setPosition(5,35);
   var popup = new lime.Sprite().setAnchorPoint(0,0);
   popup.setFill('assets/popup.png');
   popup.setSize(310,270).setPosition(0,0);
+
+
   popup.setScale(0);
   popupHolder.appendChild(popup);
   gamescene.appendChild(popupHolder);
@@ -373,7 +373,6 @@ dr.Scene.makeGameScene = function(director) {
     if(popup.getScale().x == 0) {
       remain.setFontColor('#FA7725');
       popup.setScale(1);
-
       gamescene.game.allQuiz.forEach(function(q,i) {
         pack = new lime.Sprite().setAnchorPoint(0,0);
         col = i%3;
@@ -382,12 +381,13 @@ dr.Scene.makeGameScene = function(director) {
         pack.setPosition(10+(comSize.pack.width+10)*col,20+(comSize.pack.height+15)*row);
         console.log(q.getQuestionFrame());
         q_image = new lime.Sprite().setAnchorPoint(0,0);
-        q_image.setSize(60,50).setFill(q.getQuestionFrame());
-        // q_image.setPosition(15+(comSize.pack.width+10)*col,10+(comSize.pack.height+15)*row);
+        q_image.setSize(80,60).setFill(q.getQuestionFrame());
+        q_image.setPosition(5,5);
+        if(gamescene.game.isSolved(i))
+          pack.setOpacity(0.3);
         popup.appendChild(pack);
         pack.appendChild(q_image);
       });
-
     } else {
       remain.setFontColor("#807226");
       popup.setScale(0);
@@ -452,8 +452,6 @@ dr.Scene.makeGameScene = function(director) {
   }
 
   var refreshRemain = function() {
-    remain.quizLeft --;
-    remain.setText(remain.quizLeft + "/3");
   }
 
   return gamescene;
