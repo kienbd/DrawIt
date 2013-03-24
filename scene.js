@@ -343,6 +343,8 @@ dr.Scene.makeGameScene = function(director) {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
+          nextBtn.clickStatus = "unavail";
+          prevBtn.clickStatus = "unavail";
           refreshScore();
           gamescene.board.clearBoard();
           aniC = new lime.animation.ColorTo('#000000');
@@ -354,6 +356,8 @@ dr.Scene.makeGameScene = function(director) {
             lime.scheduleManager.callAfter(function() {
               gamescene.game.nextQuiz();
               refreshScene();
+              nextBtn.clickStatus = "avail";
+              prevBtn.clickStatus = "avail";
               gamescene.board.isReady = true;
             },null,2000);
           });
