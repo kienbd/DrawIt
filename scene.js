@@ -16,6 +16,7 @@ goog.require('lime.animation.Spawn');
 goog.require('lime.animation.RotateTo');
 goog.require('lime.animation.ColorTo');
 goog.require('lime.animation.FadeTo');
+goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Spawn')
 goog.require('lime.transitions.Dissolve')
 
@@ -151,10 +152,10 @@ dr.Scene.makeSelectScene = function(director) {
     star.setSize(comSize.star);
     star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
     lbl = new lime.Label().setFontFamily('Verdana').
-      setFontColor('#c00').setFontSize(24).setFontWeight('bold').setSize(20,20);
-    text = Math.floor(Math.random()*20) + 1;
+      setFontColor('#c00').setFontSize(16).setFontWeight('bold').setSize(20,20);
+    text = Math.floor(Math.random()*20) + 1 + "/30";
     lbl.setText(text);
-    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -34,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
+    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -40,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 12);
     star.setRotation(20);
     lbl.setRotation(10);
 
@@ -168,8 +169,8 @@ dr.Scene.makeSelectScene = function(director) {
       cover.setSize(50,40);
       cover.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width/2-25,40+(comSize.pack.height+30)*row+3+ comSize.pack.height/2-25);
       packHolder.appendChild(cover);
-      packHolder.appendChild(lbl);
       packHolder.appendChild(star);
+      packHolder.appendChild(lbl);
     }
   }
 
@@ -197,8 +198,8 @@ dr.Scene.makeGameScene = function(director) {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(0,0),
     star: new goog.math.Coordinate(280,15),
-    quiz: new goog.math.Coordinate(52,47),
-    quizFrame: new goog.math.Coordinate(40,35),
+    quiz: new goog.math.Coordinate(52+216/2,47+156/2),
+    quizFrame: new goog.math.Coordinate(40+240/2,35+180/2),
     prevBtn: new goog.math.Coordinate(10,105),
     nextBtn: new goog.math.Coordinate(290,105),
     funcBtnHolder: new goog.math.Coordinate(0,205),
@@ -224,7 +225,7 @@ dr.Scene.makeGameScene = function(director) {
   var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
 
-  var lbl = new lime.Label().setText('30').setFontFamily('Verdana').
+  var lbl = new lime.Label().setText('0').setFontFamily('Verdana').
     setFontColor('#BA9F27').setFontSize(26).setFontWeight('bold').setSize(40,30);
   lbl.setPosition(250,15);
 
@@ -241,12 +242,12 @@ dr.Scene.makeGameScene = function(director) {
   var prevBtn = new dr.Button("assets/play/prevBtn.png",comSize.prevBtn);
   prevBtn.setPosition(comPosition.prevBtn);
 
-  var quizFrame = new lime.Sprite().setAnchorPoint(0,0);
+  var quizFrame = new lime.Sprite();
   quizFrame.setFill("assets/play/frame.png");
   quizFrame.setSize(comSize.quizFrame);
   quizFrame.setPosition(comPosition.quizFrame);
 
-  var quiz = new lime.Sprite().setAnchorPoint(0,0);
+  var quiz = new lime.Sprite();
   // quiz.setFill(game.currentQuiz().getQuestionFrame());
   quiz.setPosition(comPosition.quiz);
   quiz.setSize(comSize.quiz);
@@ -286,6 +287,7 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.board = board;
   gamescene.boardHolder = boardHolder;
   gamescene.hasBoard = false;
+  board.isReady = true;
   lib.loadjsfile('assets/ndollar.js',function() {
     board.init();
   });
@@ -312,17 +314,19 @@ dr.Scene.makeGameScene = function(director) {
   });
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
-    if(typeof result != "undefined") {
-      if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
-        gamescene.game.solveCurrentQuiz();
-        refreshQuizFrame();
+    if(board.isReady) {
+      if(typeof result != "undefined") {
+        if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
+          gamescene.game.solveCurrentQuiz();
+          refreshQuizFrame();
+        } else {
+          quiz.runAction(shakeAni);
+          quizFrame.runAction(shakeAni);
+        }
       } else {
         quiz.runAction(shakeAni);
         quizFrame.runAction(shakeAni);
       }
-    } else {
-      quiz.runAction(shakeAni);
-      quizFrame.runAction(shakeAni);
     }
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
@@ -347,15 +351,30 @@ dr.Scene.makeGameScene = function(director) {
   var refreshQuizFrame = function()
   {
     if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
-      quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame()).setAnchorPoint(0,0);
+      quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
     } else {
+      board.isReady = false;
       aniC = new lime.animation.ColorTo('#000000');
-      aniC.setDuration(1).enableOptimizations();
-      quiz.runAction(aniC);
+      aniC.setDuration(1.5).enableOptimizations();
+
+      aniS = new lime.animation.RotateTo(360);
+      aniS.setDuration(1.5).enableOptimizations();
 
 
-      goog.events.listen(aniC,lime.animation.Event.STOP,function(){
-        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame()).setAnchorPoint(0,0);
+      quiz.runAction(aniS);
+      quizFrame.runAction(aniS);
+
+
+      goog.events.listen(aniS,lime.animation.Event.STOP,function(){
+        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+        //auto change quiz
+        lime.scheduleManager.callAfter(function() {
+          gamescene.game.nextQuiz();
+          refreshScene();
+          board.clearBoard();
+          board.isReady = true;
+        },null,2000);
+
       });
     }
     return quiz;
