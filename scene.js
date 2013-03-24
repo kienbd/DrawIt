@@ -102,9 +102,9 @@ dr.Scene.makeSelectScene = function(director) {
 
   var comPosition = {
     topLayer: new goog.math.Coordinate(0,0),
-    lbl: new goog.math.Coordinate(160,10),
+    lbl: new goog.math.Coordinate(160,20),
     packHolder: new goog.math.Coordinate(0,40),
-    funcBtn: new goog.math.Coordinate(0,420),
+    funcBtn: new goog.math.Coordinate(0,400),
     pack1: new goog.math.Coordinate(15,20),
     pack2: new goog.math.Coordinate(115,20),
     pack3: new goog.math.Coordinate(215,20),
@@ -118,11 +118,11 @@ dr.Scene.makeSelectScene = function(director) {
     backBtn: new goog.math.Size(60,40)
   };
 
-  topLayer = new lime.Layer().setPosition(0,0);
+  topLayer = new lime.Layer().setPosition(comPosition.topLayer);
 
-  packHolder = new lime.Layer().setPosition(0,40);
+  packHolder = new lime.Layer().setPosition(comPosition.packHolder);
 
-  funcBtn = new lime.Layer().setPosition(0,420);
+  funcBtn = new lime.Layer().setPosition(comPosition.funcBtn);
 
   var lbl = new lime.Label().setText('PLAY').setFontFamily('Verdana').
     setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(160,20);
@@ -131,21 +131,24 @@ dr.Scene.makeSelectScene = function(director) {
   topLayer.appendChild(lbl);
 
   pack1 = new lime.Sprite().setAnchorPoint(0,0);
-  pack1.setFill('#D6AE81').setPosition(comPosition.pack1).setSize(comSize.pack);
+  pack1.setFill('assets/play/card.png').setPosition(comPosition.pack1).setSize(comSize.pack);
 
   pack2 = new lime.Sprite().setAnchorPoint(0,0);
-  pack2.setFill('#D5ADE1').setPosition(comPosition.pack2).setSize(comSize.pack);
+  pack2.setFill('assets/play/card.png').setPosition(comPosition.pack2).setSize(comSize.pack);
 
   pack3 = new lime.Sprite().setAnchorPoint(0,0);
-  pack3.setFill('#DEA10F').setPosition(comPosition.pack3).setSize(comSize.pack);
+  pack3.setFill('assets/play/card.png').setPosition(comPosition.pack3).setSize(comSize.pack);
 
-  psprite = new lime.Sprite().setAnchorPoint(0,0);
-  psprite.setFill('#DEEAFA').setPosition(0,0).setSize(320,380);
-
-  packHolder.appendChild(psprite);
-  packHolder.appendChild(pack1);
-  packHolder.appendChild(pack2);
-  packHolder.appendChild(pack3);
+  for(i=0;i<9;i++) {
+    pack = new lime.Sprite().setAnchorPoint(0,0);
+    col = i%3;
+    row = Math.floor(i/3);
+    pack.setFill('assets/play/card.png').setSize(comSize.pack)
+    pack.setPosition(15+(comSize.pack.width+10)*col,20+(comSize.pack.height+30)*row);
+    if(i>2)
+      pack.setOpacity(0.3);
+    packHolder.appendChild(pack);
+  }
 
   goBtn = new lime.Sprite().setAnchorPoint(0,0);
   goBtn.setFill("#DADADF").setPosition(comPosition.goBtn).setSize(comSize.goBtn);
@@ -153,7 +156,7 @@ dr.Scene.makeSelectScene = function(director) {
   backBtn.setFill("#DADADF").setPosition(comPosition.backBtn).setSize(comSize.backBtn);
 
   fsprite = new lime.Sprite().setAnchorPoint(0,0);
-  fsprite.setFill('#F0F6F1').setPosition(0,0).setSize(320,60);
+  fsprite.setFill('#F0F6F1').setPosition(0,0).setSize(320,80);
 
   funcBtn.appendChild(fsprite);
   funcBtn.appendChild(goBtn);
@@ -183,7 +186,7 @@ dr.Scene.makeGameScene = function(director) {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(0,0),
     star: new goog.math.Coordinate(280,15),
-    quiz: new goog.math.Coordinate(40,30),
+    quiz: new goog.math.Coordinate(40,35),
     prevBtn: new goog.math.Coordinate(10,105),
     nextBtn: new goog.math.Coordinate(290,105),
     funcBtnHolder: new goog.math.Coordinate(0,205),
