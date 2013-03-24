@@ -14,6 +14,9 @@ goog.require('lime.animation.MoveBy');
 goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 goog.require('lime.animation.RotateTo');
+goog.require('lime.animation.ColorTo');
+goog.require('lime.animation.FadeTo');
+goog.require('lime.animation.Spawn')
 goog.require('lime.transitions.Dissolve')
 
 // components
@@ -311,12 +314,14 @@ dr.Scene.makeGameScene = function(director) {
       if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
         gamescene.game.solveCurrentQuiz();
         refreshQuizFrame();
-      } else
+      } else {
+        quiz.runAction(shakeAni);
+        quizFrame.runAction(shakeAni);
+      }
+    } else {
       quiz.runAction(shakeAni);
       quizFrame.runAction(shakeAni);
-    } else
-      quiz.runAction(shakeAni);
-      quizFrame.runAction(shakeAni);
+    }
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
     board.clearBoard();
@@ -338,7 +343,18 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshQuizFrame = function()
   {
-    gamescene.game.isSolved(gamescene.game.currentID) == false ? quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame()).setAnchorPoint(0,0) : quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame()).setAnchorPoint(0,0);
+    if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
+      quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame()).setAnchorPoint(0,0);
+    } else {
+      aniC = new lime.animation.ColorTo('#000000');
+      aniC.setDuration(1).enableOptimizations();
+      quiz.runAction(aniC);
+
+
+      goog.events.listen(aniC,lime.animation.Event.STOP,function(){
+        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame()).setAnchorPoint(0,0);
+      });
+    }
     return quiz;
   }
 
