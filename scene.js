@@ -291,7 +291,7 @@ dr.Scene.makeGameScene = function(director) {
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
     if(typeof result != "undefined") {
-      if(result["Name"] == "A" && result["Score"] > 80) {
+      if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
         gamescene.game.solveCurrentQuiz();
         refreshQuizFrame();
       } else
