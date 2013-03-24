@@ -281,16 +281,16 @@ dr.Board.prototype.loadAnswers = function(f)
   var fc = f.split('/').pop().split('.js')[0];
   var $el = this;
   lib.loadjsfile(f);
-  goog.events.listen($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
+  goog.events.listenOnce($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
     console.log(fc);
     // $el.clearAnswers();
     var answers = window[fc]();
+    console.log('b');
     while (answers.length > 0)
       {
         var a = answers.pop();
         $el._r.AddGesture(a.name,$el._isRotationInvariance,a.strokes);
       }
-    goog.events.unlisten($el.canvas.getDeepestDomElement(),'answersloaded',null);
   });
 }
 
