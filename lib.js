@@ -65,7 +65,6 @@ lib.makeShakeAnimation = function(opt) {
     }
     aniM[i].setDuration(0.01);
     aniM[i+1].setDuration(0.01);
-    console.log(i);
   }
 
 

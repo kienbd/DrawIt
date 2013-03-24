@@ -29,7 +29,7 @@ dr.start = function(){
   loadingLayer = new lime.Layer();
   loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
   loading.setPosition(110,150);
-  lbl = new lime.Label().setText('LOADING').setFontFamily('Verdana').
+  lbl = new lime.Label().setText('Group 5').setFontFamily('Verdana').
     setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(160,20);
   lbl.setPosition(160,280);
 	var anim = new lime.animation.KeyframeAnimation();
@@ -45,17 +45,20 @@ dr.start = function(){
 
   dr.director.replaceScene(loadingscene);
 
+  var menuscene;
+  var selectscene;
+  var gamescene;
   lime.scheduleManager.callAfter(function() {
-    var menuscene = dr.Scene.makeMenuScene(dr.director);
-    var selectscene = dr.Scene.makeSelectScene(dr.director);
-    var gamescene = dr.Scene.makeGameScene(dr.director);
+    menuscene = dr.Scene.makeMenuScene(dr.director);
+    selectscene = dr.Scene.makeSelectScene(dr.director);
+    gamescene = dr.Scene.makeGameScene(dr.director);
     gamescene.transScenes["menuScene"] = menuscene;
     gamescene.transScenes["selectScene"] = selectscene;
     menuscene.transScenes["selectScene"] = selectscene;
     selectscene.transScenes["menuScene"] = menuscene;
     selectscene.transScenes["gameScene"] = gamescene;
     dr.director.replaceScene(menuscene);
-  },dr.director,3000);
+  },dr.director,0);
 
   lib.setBackground('assets/background.png',320,480);
 };

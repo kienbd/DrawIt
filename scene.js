@@ -61,19 +61,14 @@ dr.Scene.makeMenuScene = function(director) {
 
   var btnHolder = new lime.Layer().setPosition(comPosition.btnHolder);
 
-  var playBtn = new lime.Sprite();
-  playBtn.setFill('assets/menu/playBtn.png').setAnchorPoint(0,0);
-  playBtn.setSize(comSize.menuBtn);
+
+  var playBtn = new dr.Button('assets/menu/playBtn.png',comSize.menuBtn);
   playBtn.setPosition(comPosition.playBtn);
 
-  var shopBtn = new lime.Sprite();
-  shopBtn.setFill('assets/menu/shopBtn.png').setAnchorPoint(0,0);
-  shopBtn.setSize(comSize.menuBtn);
-  shopBtn.setPosition(comPosition.shopBtn)
+  var shopBtn = new dr.Button('assets/menu/shopBtn.png',comSize.menuBtn);
+  shopBtn.setPosition(comPosition.shopBtn);
 
-  var settingBtn = new lime.Sprite();
-  settingBtn.setFill('assets/menu/settingBtn.png').setAnchorPoint(0,0);
-  settingBtn.setSize(comSize.menuBtn);
+  var settingBtn = new dr.Button('assets/menu/settingBtn.png',comSize.menuBtn);
   settingBtn.setPosition(comPosition.settingBtn);
 
   btnHolder.appendChild(playBtn);
@@ -85,7 +80,7 @@ dr.Scene.makeMenuScene = function(director) {
   menuScene.appendChild(btnHolder);
 
 
-  goog.events.listen(playBtn,['touchstart','mousedown'],function() {
+  lib.setEvent(playBtn,['touchstart','mousedown'],function() {
     director.replaceScene(menuScene.transScenes["selectScene"],lime.transitions.SlideInRight,0.7);
   });
 
@@ -186,8 +181,8 @@ dr.Scene.makeGameScene = function(director) {
 
   comPosition = {
     quizHolder: new goog.math.Coordinate(0,0),
-    menuBtn: new goog.math.Coordinate(20,10),
-    remainBtn: new goog.math.Coordinate(150,15),
+    menuBtn: new goog.math.Coordinate(0,0),
+    star: new goog.math.Coordinate(280,15),
     quiz: new goog.math.Coordinate(40,30),
     prevBtn: new goog.math.Coordinate(10,105),
     nextBtn: new goog.math.Coordinate(290,105),
@@ -200,7 +195,7 @@ dr.Scene.makeGameScene = function(director) {
 
   var comSize = {
     menuBtn: new goog.math.Size(50,30),
-    remainBtn: new goog.math.Size(30,30),
+    star: new goog.math.Size(30,30),
     quiz: new goog.math.Size(240,180),
     nextBtn: new goog.math.Size(20,30),
     prevBtn: new goog.math.Size(20,30),
@@ -210,26 +205,25 @@ dr.Scene.makeGameScene = function(director) {
     board: new goog.math.Size(320,220)
   };
 
-  var menuBtn = new lime.Sprite();
-  menuBtn.setFill('assets/play/menuBtn.png');
-  menuBtn.setSize(comSize.menuBtn);
+  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
-  menuBtn.clickStatus = "avail";
 
-  var remainBtn = new lime.Sprite();
-  remainBtn.setFill('assets/play/remain.png');
-  remainBtn.setSize(comSize.remainBtn);
-  remainBtn.setPosition(comPosition.remainBtn);
+  var lbl = new lime.Label().setText('30').setFontFamily('Verdana').
+    setFontColor('#BA9F27').setFontSize(26).setFontWeight('bold').setSize(40,30);
+  lbl.setPosition(250,15);
+
+  var star = new lime.Sprite();
+  star.setFill('assets/play/star.png');
+  star.setSize(comSize.star);
+  star.setPosition(comPosition.star);
 
   var quizHolder = new lime.Layer();
   quizHolder.setPosition(comPosition.quizHolder);
 
-  var nextBtn = new lime.Sprite().setFill("assets/play/nextBtn.png").setAnchorPoint(0,0);
-  nextBtn.setSize(comSize.nextBtn).setPosition(comPosition.nextBtn);
-  var prevBtn = new lime.Sprite().setFill("assets/play/prevBtn.png").setAnchorPoint(0,0);
-  prevBtn.setSize(comSize.prevBtn).setPosition(comPosition.prevBtn);
-  nextBtn.clickStatus = "avail";
-  prevBtn.clickStatus = "avail";
+  var nextBtn = new dr.Button("assets/play/nextBtn.png",comSize.nextBtn);
+  nextBtn.setPosition(comPosition.nextBtn);
+  var prevBtn = new dr.Button("assets/play/prevBtn.png",comSize.prevBtn);
+  prevBtn.setPosition(comPosition.prevBtn);
 
   var quiz = new lime.Sprite().setAnchorPoint(0,0);
   // quiz.setFill(game.currentQuiz().getQuestionFrame());
@@ -239,7 +233,8 @@ dr.Scene.makeGameScene = function(director) {
 
   quizHolder.appendChild(quiz);
   quizHolder.appendChild(menuBtn);
-  quizHolder.appendChild(remainBtn);
+  quizHolder.appendChild(star);
+  quizHolder.appendChild(lbl);
   quizHolder.appendChild(nextBtn);
   quizHolder.appendChild(prevBtn);
 
@@ -249,20 +244,14 @@ dr.Scene.makeGameScene = function(director) {
   var funcBtnHolder = new lime.Layer();
   funcBtnHolder.setPosition(comPosition.funcBtnHolder);
 
-  var submitBtn = new lime.Sprite().setFill('assets/play/submitBtn.png').setAnchorPoint(0,0);
-  submitBtn.setSize(comSize.submitBtn);
+  var submitBtn = new dr.Button('assets/play/submitBtn.png',comSize.submitBtn);
   submitBtn.setPosition(comPosition.submitBtn);
-  var clearBtn = new lime.Sprite().setFill('assets/play/clearBtn.png').setAnchorPoint(0,0);
-  clearBtn.setSize(comSize.clearBtn);
+
+  var clearBtn = new dr.Button('assets/play/clearBtn.png',comSize.clearBtn);
   clearBtn.setPosition(comPosition.clearBtn);
-  var undoBtn = new lime.Sprite().setFill('assets/play/undoBtn.png').setAnchorPoint(0,0);
-  undoBtn.setSize(comSize.undoBtn);
+
+  var undoBtn = new dr.Button('assets/play/undoBtn.png',comSize.undoBtn);
   undoBtn.setPosition(comPosition.undoBtn);
-
-
-  submitBtn.clickStatus = "avail";
-  clearBtn.clickStatus = "avail";
-  undoBtn.clickStatus = "avail";
 
   funcBtnHolder.appendChild(submitBtn);
   funcBtnHolder.appendChild(clearBtn);
@@ -316,9 +305,6 @@ dr.Scene.makeGameScene = function(director) {
   });
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
-  });
-  lib.setEvent(remainBtn,['touchstart','mousedown'],function() {
-
   });
 
   var refreshScence = function()
