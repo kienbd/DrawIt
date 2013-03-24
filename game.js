@@ -11,8 +11,10 @@ dr.Game = function(packName) {
   }
   this.totalQuiz = dr.Game.QUIZNUM;
   this.currentID = 0;
+  this.score = 0;
   this.solvedQuizzes = [];
   this.answers = "assets/" +packName + "/answers" + ".js";
+  this.won = false;
 };
 
 
@@ -74,8 +76,11 @@ dr.Game.prototype.isSolved = function(i) {
     return true;
 };
 
-dr.Game.prototype.solveCurrentQuiz = function() {
+dr.Game.prototype.solveCurrentQuiz = function(score) {
+  this.score += score;
   this.solvedQuizzes.push(this.currentID);
+  if (this.solvedQuizzes.length == dr.Game.QUIZNUM)
+    this.won = true;
 }
 
 dr.Game.prototype.unSolvedQuizzes = function() {

@@ -313,12 +313,22 @@ dr.Scene.makeGameScene = function(director) {
     }
   });
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
-    result = board.submit();
     if(board.isReady) {
+      result = board.submit();
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
-          gamescene.game.solveCurrentQuiz();
+          gamescene.game.solveCurrentQuiz(3); //3 is score player got
+          board.isReady = false;
           refreshQuizFrame();
+          refreshScore();
+          board.clearBoard();
+          //auto change quiz
+          lime.scheduleManager.callAfter(function() {
+            if (gamescene.game.nextQuiz()) {
+              refreshScene();
+              board.isReady = true;
+            }
+          },null,4000);
         } else {
           quiz.runAction(shakeAni);
           quizFrame.runAction(shakeAni);
@@ -340,40 +350,42 @@ dr.Scene.makeGameScene = function(director) {
     director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
   });
 
+  // just refresh without any action
   var refreshScene = function()
   {
     refreshQuizFrame();
     refreshQuizNavigatorButton();
     refreshUndoButton();
+    refreshScore();
+    gamescene.board.clearBoard();
   }
   gamescene.refreshScene = refreshScene;
+
+  var refreshScore = function() {
+    lbl.setText(gamescene.game.score);
+  }
 
   var refreshQuizFrame = function()
   {
     if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
-      quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
-    } else {
-      board.isReady = false;
-
+      //animation when show question
       aniC = new lime.animation.ColorTo('#000000');
-      aniC.setDuration(1.5);
-
+      aniC.setDuration(0);
       quiz.runAction(aniC);
-
-      goog.events.listen(aniC,lime.animation.Event.STOP,function(){
-        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
-        lbl.setText(parseInt(lbl.getText()) +3);
-        board.clearBoard();
-        //auto change quiz
-        lime.scheduleManager.callAfter(function() {
-          gamescene.game.nextQuiz();
-          refreshScene();
-          board.isReady = true;
-        },null,2000);
-
+      goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
+        quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
       });
     }
+    else {
+      //animation when show answer
+      aniC = new lime.animation.ColorTo('#000000');
+      aniC.setDuration(1.5);
+      quiz.runAction(aniC);
+      goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
+        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+      });
     return quiz;
+    }
   }
 
   var refreshQuizNavigatorButton = function()
