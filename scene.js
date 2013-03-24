@@ -228,12 +228,14 @@ dr.Scene.makeGameScene = function(director) {
   menuBtn.setPosition(comPosition.menuBtn);
 
   var lbl = new lime.Label().setText('0').setFontFamily('Verdana').
-    setFontColor('#BA9F27').setFontSize(26).setFontWeight('bold').setSize(40,30);
-  lbl.setPosition(250,15);
+    setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(40,30);
+  lbl.setPosition(255,15);
 
   var remain = new lime.Label().setText('3/3').setFontFamily('Verdana').
     setFontColor('#807226').setFontSize(26).setFontWeight('bold').setSize(40,30);
   remain.setPosition(160,20);
+
+  remain.quizLeft = 4;
 
   var star = new lime.Sprite();
   star.setFill('assets/play/star.png');
@@ -344,7 +346,7 @@ dr.Scene.makeGameScene = function(director) {
               refreshScene();
               board.isReady = true;
             }
-          },null,4000);
+          },null,2000);
         } else {
           quiz.runAction(shakeAni);
           quizFrame.runAction(shakeAni);
@@ -383,6 +385,7 @@ dr.Scene.makeGameScene = function(director) {
     refreshUndoButton();
     refreshScore();
     gamescene.board.clearBoard();
+    refreshRemain();
   }
   gamescene.refreshScene = refreshScene;
 
@@ -428,6 +431,11 @@ dr.Scene.makeGameScene = function(director) {
   var refreshUndoButton = function()
   {
     // ko undo dc thi disable di
+  }
+
+  var refreshRemain = function() {
+    remain.quizLeft --;
+    remain.setText(remain.quizLeft + "/3");
   }
 
   return gamescene;
