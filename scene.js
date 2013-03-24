@@ -221,7 +221,8 @@ dr.Scene.makeGameScene = function(director) {
     submitBtn: new goog.math.Size(80,40),
     clearBtn: new goog.math.Size(50,30),
     undoBtn: new goog.math.Size(50,30),
-    board: new goog.math.Size(320,220)
+    board: new goog.math.Size(320,220),
+    pack: new goog.math.Size(90,70)
   };
 
   var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
@@ -372,6 +373,20 @@ dr.Scene.makeGameScene = function(director) {
     if(popup.getScale().x == 0) {
       remain.setFontColor('#FA7725');
       popup.setScale(1);
+
+      gamescene.game.allQuiz.forEach(function(q,i) {
+        pack = new lime.Sprite().setAnchorPoint(0,0);
+        col = i%3;
+        row = Math.floor(i/3);
+        pack.setFill('assets/play/frame.png').setSize(comSize.pack);
+        pack.setPosition(10+(comSize.pack.width+10)*col,20+(comSize.pack.height+15)*row);
+        q.setSize(60,50);
+        console.log(q);
+        q.setPosition(15+(comSize.pack.width+10)*col,10+(comSize.pack.height+15)*row);
+        popup.appendChild(pack);
+        pack.appendChild(q);
+      });
+
     } else {
       remain.setFontColor("#807226");
       popup.setScale(0);
