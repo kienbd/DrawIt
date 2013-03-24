@@ -24,17 +24,43 @@ dr.Game.prototype.changeQuiz = function(i) {
 
 
 dr.Game.prototype.nextQuiz = function() {
-  if (this.currentID < dr.Game.QUIZNUM - 1)
-    this.currentID++;
-  if (this.isSolved(this.currentID) == true)
-    this.nextQuiz();
+  var i = this.canNextQuiz();
+  if (typeof i != 'undefined') {
+    this.currentID = i;
+    return true;
+  } else return false;
 };
 
 dr.Game.prototype.prevQuiz = function() {
-  if (this.currentID > 0)
-    this.currentID--;
-  if (this.isSolved(this.currentID) == true)
-    this.prevQuiz();
+  var i = this.canPrevQuiz();
+  if (typeof i != 'undefined') {
+    this.currentID = i;
+    return true;
+  } else return false;
+};
+
+dr.Game.prototype.canNextQuiz = function() {
+  var i = this.currentID + 1;
+  while (i < dr.Game.QUIZNUM)
+    if (this.isSolved(i) == false)
+      break;
+    else
+      i++;
+  if (i < dr.Game.QUIZNUM) {
+    return i;
+  }
+};
+
+dr.Game.prototype.canPrevQuiz = function() {
+  var i = this.currentID - 1;
+  while (i > -1)
+    if (this.isSolved(i) == false)
+      break;
+    else
+      i--;
+  if (i > -1) {
+    return i;
+  }
 };
 
 dr.Game.prototype.currentQuiz = function() {

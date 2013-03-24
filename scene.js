@@ -299,14 +299,16 @@ dr.Scene.makeGameScene = function(director) {
   });
 
   lib.setEvent(nextBtn,['touchstart','mousedown'],function() {
-    gamescene.game.nextQuiz();
-    refreshScence();
-    board.clearBoard();
+    if (gamescene.game.nextQuiz() == true) {
+      refreshScene();
+      board.clearBoard();
+    }
   });
   lib.setEvent(prevBtn,['touchstart','mousedown'],function() {
-    gamescene.game.prevQuiz();
-    refreshScence();
-    board.clearBoard();
+    if (gamescene.game.prevQuiz() == true) {
+      refreshScene();
+      board.clearBoard();
+    }
   });
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
     result = board.submit();
@@ -334,12 +336,13 @@ dr.Scene.makeGameScene = function(director) {
     director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
   });
 
-  var refreshScence = function()
+  var refreshScene = function()
   {
     refreshQuizFrame();
     refreshQuizNavigatorButton();
     refreshUndoButton();
   }
+  gamescene.refreshScene = refreshScene;
 
   var refreshQuizFrame = function()
   {
@@ -360,6 +363,13 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshQuizNavigatorButton = function()
   {
+    if (typeof gamescene.game.canNextQuiz() == 'undefined')
+      nextBtn.setHidden(true);
+    else nextBtn.setHidden(false);
+
+    if (typeof gamescene.game.canPrevQuiz() == 'undefined')
+      prevBtn.setHidden(true);
+    else prevBtn.setHidden(false);
     // co the disable prev button khi dang quiz dau tien hoac la next button khi dang o quiz cuoi
   }
 
@@ -389,6 +399,7 @@ dr.Scene.reloadGameScene = function(gamescene,packname) {
     gamescene.game = game;
     gamescene.board.clearBoard();
     gamescene.board.loadAnswers(game.answers);
-    gamescene.quiz.setFill(game.currentQuiz().getQuestionFrame());
+    gamescene.refreshScene();
+    // gamescene.quiz.setFill(game.currentQuiz().getQuestionFrame());
   }
 };
