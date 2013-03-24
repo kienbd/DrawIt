@@ -10,7 +10,7 @@ dr.Quiz = function(link) {
   window.b = this;
 }
 
-dr.Quiz.width = 290;
+dr.Quiz.width = 240;
 dr.Quiz.height = 180;
 
 goog.inherits(dr.Quiz,dr.Sprite);
