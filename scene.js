@@ -14,9 +14,9 @@ goog.require('lime.animation.MoveBy');
 goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 goog.require('lime.animation.RotateTo');
+goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.ColorTo');
 goog.require('lime.animation.FadeTo');
-goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Spawn')
 goog.require('lime.transitions.Dissolve')
 
@@ -152,10 +152,10 @@ dr.Scene.makeSelectScene = function(director) {
     star.setSize(comSize.star);
     star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
     lbl = new lime.Label().setFontFamily('Verdana').
-      setFontColor('#c00').setFontSize(16).setFontWeight('bold').setSize(20,20);
+      setFontColor('#c00').setFontSize(12).setFontWeight('bold').setSize(20,20).setAnchorPoint(0,0);
     text = Math.floor(Math.random()*20) + 1 + "/30";
     lbl.setText(text);
-    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -40,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 12);
+    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -55,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
     star.setRotation(20);
     lbl.setRotation(10);
 
@@ -354,24 +354,20 @@ dr.Scene.makeGameScene = function(director) {
       quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
     } else {
       board.isReady = false;
+
       aniC = new lime.animation.ColorTo('#000000');
-      aniC.setDuration(1.5).enableOptimizations();
+      aniC.setDuration(1.5);
 
-      aniS = new lime.animation.RotateTo(360);
-      aniS.setDuration(1.5).enableOptimizations();
+      quiz.runAction(aniC);
 
-
-      quiz.runAction(aniS);
-      quizFrame.runAction(aniS);
-
-
-      goog.events.listen(aniS,lime.animation.Event.STOP,function(){
+      goog.events.listen(aniC,lime.animation.Event.STOP,function(){
         quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+        lbl.setText(parseInt(lbl.getText()) +3);
+        board.clearBoard();
         //auto change quiz
         lime.scheduleManager.callAfter(function() {
           gamescene.game.nextQuiz();
           refreshScene();
-          board.clearBoard();
           board.isReady = true;
         },null,2000);
 
