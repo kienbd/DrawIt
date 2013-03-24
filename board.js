@@ -267,7 +267,7 @@ dr.Board.prototype.undoStroke = function()
   if (this._strokes.length > 0)
     this._points = clone(this._strokes[this._strokes.length - 1]);
   // this._points.splice(this._points.length - 1, this._points.length);
-  this.canvas.renderer.drawCanvasObject.call(window.board.canvas,window.board._g);
+  this.canvas.renderer.drawCanvasObject.call(this.canvas,this._g);
   this.reDraw();
 }
 
