@@ -222,7 +222,6 @@ dr.Scene.makeGameScene = function(director) {
     clearBtn: new goog.math.Size(50,30),
     undoBtn: new goog.math.Size(50,30),
     board: new goog.math.Size(320,220),
-    pack: new goog.math.Size(90,70)
   };
 
   var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
@@ -313,6 +312,8 @@ dr.Scene.makeGameScene = function(director) {
   popupHolder.appendChild(popup);
   gamescene.appendChild(popupHolder);
 
+  gamescene.popup = popup;
+
   var shakeAni = lib.makeShakeAnimation(10);
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
     quiz.setPosition(comPosition.quiz);
@@ -373,21 +374,6 @@ dr.Scene.makeGameScene = function(director) {
     if(popup.getScale().x == 0) {
       remain.setFontColor('#FA7725');
       popup.setScale(1);
-      gamescene.game.allQuiz.forEach(function(q,i) {
-        pack = new lime.Sprite().setAnchorPoint(0,0);
-        col = i%3;
-        row = Math.floor(i/3);
-        pack.setFill('assets/play/frame.png').setSize(comSize.pack);
-        pack.setPosition(10+(comSize.pack.width+10)*col,20+(comSize.pack.height+15)*row);
-        console.log(q.getQuestionFrame());
-        q_image = new lime.Sprite().setAnchorPoint(0,0);
-        q_image.setSize(80,60).setFill(q.getQuestionFrame());
-        q_image.setPosition(5,5);
-        if(gamescene.game.isSolved(i))
-          pack.setOpacity(0.3);
-        popup.appendChild(pack);
-        pack.appendChild(q_image);
-      });
     } else {
       remain.setFontColor("#807226");
       popup.setScale(0);
@@ -476,6 +462,20 @@ dr.Scene.reloadGameScene = function(gamescene,packname) {
     gamescene.board.clearBoard();
     gamescene.board.loadAnswers(game.answers);
     gamescene.refreshScene();
+
+    gamescene.game.allQuiz.forEach(function(q,i) {
+      pack = new lime.Sprite().setAnchorPoint(0,0);
+      col = i%3;
+      row = Math.floor(i/3);
+      pack.setFill('assets/play/frame.png').setSize(90,70);
+      pack.setPosition(10+(90+10)*col,20+(70+15)*row);
+      console.log(q.getQuestionFrame());
+      q_image = new lime.Sprite().setAnchorPoint(0,0);
+      q_image.setSize(80,60).setFill(q.getQuestionFrame());
+      q_image.setPosition(5,5);
+      gamescene.popup.appendChild(pack);
+      pack.appendChild(q_image);
+    });
     // gamescene.quiz.setFill(game.currentQuiz().getQuestionFrame());
   }
 };
