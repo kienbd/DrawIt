@@ -144,10 +144,7 @@ dr.Scene.makeSelectScene = function(director) {
     row = Math.floor(i/3);
     pack.setFill('assets/play/frame.png').setSize(comSize.pack)
     pack.setPosition(15+(comSize.pack.width+10)*col,40+(comSize.pack.height+30)*row);
-    goog.events.listen(pack,['touchstart','mousedown'],function() {
-      director.replaceScene(selectScene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
-      dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
-    });
+
 
     star = new lime.Sprite();
     star.setFill('assets/play/star.png');
@@ -166,6 +163,10 @@ dr.Scene.makeSelectScene = function(director) {
     if(i>2)
       pack.setOpacity(0.3);
     else {
+      goog.events.listen(pack,['touchstart','mousedown'],function() {
+        director.replaceScene(selectScene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
+        dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
+      });
       cover = new lime.Sprite().setAnchorPoint(0,0);
       cover.setFill('assets/pack' + (i+1) + ".png");
       cover.setSize(50,40);
@@ -221,7 +222,7 @@ dr.Scene.makeGameScene = function(director) {
     submitBtn: new goog.math.Size(80,40),
     clearBtn: new goog.math.Size(50,30),
     undoBtn: new goog.math.Size(50,30),
-    board: new goog.math.Size(320,220),
+    board: new goog.math.Size(320,220)
   };
 
   var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
@@ -316,6 +317,8 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.popup = popup;
 
   var shakeAni = lib.makeShakeAnimation(10);
+  var flipAni = new lime.animation.ColorTo('#000000');
+
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
     quiz.setPosition(comPosition.quiz);
     quizFrame.setPosition(comPosition.quizFrame);
@@ -379,6 +382,11 @@ dr.Scene.makeGameScene = function(director) {
     if(popup.getScale().x == 0) {
       remain.setFontColor('#FA7725');
       popup.setScale(1);
+      gamescene.game.allQuiz.forEach(function(e,i) {
+        if(gamescene.game.isSolved(i)) {
+          popup.getChildAt(i).setOpacity(0.2);
+        }
+      });
     } else {
       remain.setFontColor("#807226");
       popup.setScale(0);
@@ -405,10 +413,16 @@ dr.Scene.makeGameScene = function(director) {
   var refreshQuizFrame = function()
   {
     if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
+      //animation when show question
       quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
     }
     else {
-      quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+      //animation when show answer
+      flipAni.setDuration(1);
+      quiz.runAction(flipAni);
+      goog.events.listenOnce(flipAni,lime.animation.Event.STOP,function(){
+        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+      });
     return quiz;
     }
   }
@@ -431,6 +445,9 @@ dr.Scene.makeGameScene = function(director) {
   }
 
   var refreshRemain = function() {
+    left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
+    console.log(left);
+    remain.setText(left + "/3");
   }
 
   return gamescene;
@@ -455,8 +472,10 @@ dr.Scene.reloadGameScene = function(gamescene,packname) {
     gamescene.game = game;
     gamescene.board.clearBoard();
     gamescene.board.loadAnswers(game.answers);
+    gamescene.board.isReady = true;
     gamescene.refreshScene();
 
+    gamescene.popup.removeAllChildren();
     gamescene.game.allQuiz.forEach(function(q,i) {
       pack = new lime.Sprite().setAnchorPoint(0,0);
       col = i%3;
