@@ -307,7 +307,7 @@ dr.Scene.makeGameScene = function(director) {
   popupHolder.setPosition(5,25);
   var popup = new lime.Sprite().setAnchorPoint(0,0);
   popup.setFill('assets/popup.png');
-  popup.setSize(310,250).setPosition(0,0);
+  popup.setSize(310,270).setPosition(0,0);
   popup.setScale(0);
   popupHolder.appendChild(popup);
   gamescene.appendChild(popupHolder);
@@ -370,8 +370,10 @@ dr.Scene.makeGameScene = function(director) {
 
   goog.events.listen(remain,['touchstart','mousedown'],function() {
     if(popup.getScale().x == 0) {
+      remain.setFontColor('#FA7725');
       popup.setScale(1);
     } else {
+      remain.setFontColor("#807226");
       popup.setScale(0);
     }
   })
