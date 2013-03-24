@@ -26,11 +26,15 @@ dr.Game.prototype.changeQuiz = function(i) {
 dr.Game.prototype.nextQuiz = function() {
   if (this.currentID < dr.Game.QUIZNUM - 1)
     this.currentID++;
+  if (this.isSolved(this.currentID) == true)
+    this.nextQuiz();
 };
 
 dr.Game.prototype.prevQuiz = function() {
   if (this.currentID > 0)
     this.currentID--;
+  if (this.isSolved(this.currentID) == true)
+    this.prevQuiz();
 };
 
 dr.Game.prototype.currentQuiz = function() {

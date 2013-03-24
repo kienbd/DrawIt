@@ -352,6 +352,7 @@ dr.Scene.reloadGameScene = function(gamescene,packname) {
       gamescene.hasBoard = true;
     }
     gamescene.game = game;
+    gamescene.board.clearBoard();
     gamescene.board.loadAnswers(game.answers);
     gamescene.quiz.setFill(game.currentQuiz().getQuestionFrame());
   }
