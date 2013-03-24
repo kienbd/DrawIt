@@ -44,7 +44,7 @@ dr.Scene.makeMenuScene = function(director) {
 
   var comPosition = {
     logo: new goog.math.Coordinate(0,0),
-    btnHolder: new goog.math.Coordinate(0,160),
+    btnHolder: new goog.math.Coordinate(0,140),
     playBtn: new goog.math.Coordinate(80,20),
     shopBtn: new goog.math.Coordinate(80,120),
     settingBtn: new goog.math.Coordinate(80,230)
@@ -106,19 +106,20 @@ dr.Scene.makeSelectScene = function(director) {
 
   var comPosition = {
     topLayer: new goog.math.Coordinate(0,0),
-    lbl: new goog.math.Coordinate(160,20),
-    packHolder: new goog.math.Coordinate(0,40),
-    funcBtn: new goog.math.Coordinate(0,400),
+    lbl: new goog.math.Coordinate(160,50),
+    packHolder: new goog.math.Coordinate(0,60),
+    funcBtn: new goog.math.Coordinate(0,410),
     pack1: new goog.math.Coordinate(15,20),
     pack2: new goog.math.Coordinate(115,20),
     pack3: new goog.math.Coordinate(215,20),
     goBtn: new goog.math.Coordinate(240,10),
-    backBtn: new goog.math.Coordinate(20,10)
+    backBtn: new goog.math.Coordinate(10,10)
   };
 
   var comSize = {
     pack: new goog.math.Size(90,80),
     star: new goog.math.Size(20,20),
+    lbl: new goog.math.Size(160,60),
     goBtn: new goog.math.Size(60,40),
     backBtn: new goog.math.Size(50,30)
   };
@@ -129,8 +130,9 @@ dr.Scene.makeSelectScene = function(director) {
 
   funcBtn = new lime.Layer().setPosition(comPosition.funcBtn);
 
-  var lbl = new lime.Label().setText('PLAY').setFontFamily('Verdana').
-    setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(160,20);
+  var lbl = new lime.Sprite();
+  lbl.setFill('assets/play/playLabel.png');
+  lbl.setSize(comSize.lbl);
   lbl.setPosition(comPosition.lbl);
 
   topLayer.appendChild(lbl);
@@ -197,7 +199,7 @@ dr.Scene.makeGameScene = function(director) {
   comPosition = {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(0,0),
-    star: new goog.math.Coordinate(280,15),
+    star: new goog.math.Coordinate(290,15),
     quiz: new goog.math.Coordinate(52+216/2,47+156/2),
     quizFrame: new goog.math.Coordinate(40+240/2,35+180/2),
     prevBtn: new goog.math.Coordinate(10,105),
