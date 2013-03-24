@@ -340,16 +340,20 @@ dr.Scene.makeGameScene = function(director) {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
-          refreshQuizFrame();
           refreshScore();
           gamescene.board.clearBoard();
-          //auto change quiz
-          lime.scheduleManager.callAfter(function() {
-            if (gamescene.game.nextQuiz()) {
+          aniC = new lime.animation.ColorTo('#000000');
+          aniC.setDuration(1.5);
+          quiz.runAction(aniC);
+          goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
+            quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
+            //auto change quiz
+            lime.scheduleManager.callAfter(function() {
+              gamescene.game.nextQuiz();
               refreshScene();
               gamescene.board.isReady = true;
-            }
-          },null,2000);
+            },null,2000);
+          });
         } else {
           quiz.runAction(shakeAni);
           quizFrame.runAction(shakeAni);
@@ -401,22 +405,10 @@ dr.Scene.makeGameScene = function(director) {
   var refreshQuizFrame = function()
   {
     if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
-      //animation when show question
-      aniC = new lime.animation.ColorTo('#000000');
-      aniC.setDuration(0);
-      quiz.runAction(aniC);
-      goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
-        quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
-      });
+      quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
     }
     else {
-      //animation when show answer
-      aniC = new lime.animation.ColorTo('#000000');
-      aniC.setDuration(1.5);
-      quiz.runAction(aniC);
-      goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
-        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
-      });
+      quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
     return quiz;
     }
   }
@@ -454,6 +446,7 @@ dr.Scene.makeShopScene = function() {
 
 dr.Scene.reloadGameScene = function(gamescene,packname) {
   var game = new dr.Game(packname);
+  window.a = game;
   if (typeof game != 'undefined') {
     if(!gamescene.hasBoard) {
       gamescene.boardHolder.appendChild(gamescene.board.canvas);
