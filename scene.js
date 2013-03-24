@@ -113,9 +113,10 @@ dr.Scene.makeSelectScene = function(director) {
   };
 
   var comSize = {
-    pack: new goog.math.Size(90,70),
+    pack: new goog.math.Size(90,80),
+    star: new goog.math.Size(20,20),
     goBtn: new goog.math.Size(60,40),
-    backBtn: new goog.math.Size(60,40)
+    backBtn: new goog.math.Size(50,30)
   };
 
   topLayer = new lime.Layer().setPosition(comPosition.topLayer);
@@ -130,47 +131,54 @@ dr.Scene.makeSelectScene = function(director) {
 
   topLayer.appendChild(lbl);
 
-  pack1 = new lime.Sprite().setAnchorPoint(0,0);
-  pack1.setFill('assets/play/card.png').setPosition(comPosition.pack1).setSize(comSize.pack);
-
-  pack2 = new lime.Sprite().setAnchorPoint(0,0);
-  pack2.setFill('assets/play/card.png').setPosition(comPosition.pack2).setSize(comSize.pack);
-
-  pack3 = new lime.Sprite().setAnchorPoint(0,0);
-  pack3.setFill('assets/play/card.png').setPosition(comPosition.pack3).setSize(comSize.pack);
-
   for(i=0;i<9;i++) {
+
     pack = new lime.Sprite().setAnchorPoint(0,0);
     col = i%3;
     row = Math.floor(i/3);
-    pack.setFill('assets/play/card.png').setSize(comSize.pack)
-    pack.setPosition(15+(comSize.pack.width+10)*col,20+(comSize.pack.height+30)*row);
+    pack.setFill('assets/play/frame.png').setSize(comSize.pack)
+    pack.setPosition(15+(comSize.pack.width+10)*col,40+(comSize.pack.height+30)*row);
+    goog.events.listen(pack,['touchstart','mousedown'],function() {
+      director.replaceScene(selectScene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
+      dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
+    });
+
+    star = new lime.Sprite();
+    star.setFill('assets/play/star.png');
+    star.setSize(comSize.star);
+    star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
+    lbl = new lime.Label().setFontFamily('Verdana').
+      setFontColor('#c00').setFontSize(24).setFontWeight('bold').setSize(20,20);
+    text = Math.floor(Math.random()*20) + 1;
+    lbl.setText(text);
+    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -34,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
+    star.setRotation(20);
+    lbl.setRotation(10);
+
+
+    packHolder.appendChild(pack);
     if(i>2)
       pack.setOpacity(0.3);
-    packHolder.appendChild(pack);
+    else {
+      cover = new lime.Sprite().setAnchorPoint(0,0);
+      cover.setFill('assets/pack' + (i+1) + ".png");
+      cover.setSize(50,40);
+      cover.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width/2-25,40+(comSize.pack.height+30)*row+3+ comSize.pack.height/2-25);
+      packHolder.appendChild(cover);
+      packHolder.appendChild(lbl);
+      packHolder.appendChild(star);
+    }
   }
 
-  goBtn = new lime.Sprite().setAnchorPoint(0,0);
-  goBtn.setFill("#DADADF").setPosition(comPosition.goBtn).setSize(comSize.goBtn);
-  backBtn = new lime.Sprite().setAnchorPoint(0,0);
-  backBtn.setFill("#DADADF").setPosition(comPosition.backBtn).setSize(comSize.backBtn);
+  var backBtn = new dr.Button('assets/play/menuBtn.png',comSize.backBtn);
+  backBtn.setPosition(comPosition.backBtn);
 
-  fsprite = new lime.Sprite().setAnchorPoint(0,0);
-  fsprite.setFill('#F0F6F1').setPosition(0,0).setSize(320,80);
-
-  funcBtn.appendChild(fsprite);
-  funcBtn.appendChild(goBtn);
   funcBtn.appendChild(backBtn);
 
   selectScene.appendChild(topLayer);
   selectScene.appendChild(packHolder);
   selectScene.appendChild(funcBtn);
 
-
-  goog.events.listen(goBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(selectScene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
-    dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
-  });
 
   goog.events.listen(backBtn,['touchstart','mousedown'],function() {
     director.replaceScene(selectScene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
@@ -186,7 +194,8 @@ dr.Scene.makeGameScene = function(director) {
     quizHolder: new goog.math.Coordinate(0,0),
     menuBtn: new goog.math.Coordinate(0,0),
     star: new goog.math.Coordinate(280,15),
-    quiz: new goog.math.Coordinate(40,35),
+    quiz: new goog.math.Coordinate(52,47),
+    quizFrame: new goog.math.Coordinate(40,35),
     prevBtn: new goog.math.Coordinate(10,105),
     nextBtn: new goog.math.Coordinate(290,105),
     funcBtnHolder: new goog.math.Coordinate(0,205),
@@ -199,7 +208,8 @@ dr.Scene.makeGameScene = function(director) {
   var comSize = {
     menuBtn: new goog.math.Size(50,30),
     star: new goog.math.Size(30,30),
-    quiz: new goog.math.Size(240,180),
+    quiz: new goog.math.Size(216,156),
+    quizFrame: new goog.math.Size(240,180),
     nextBtn: new goog.math.Size(20,30),
     prevBtn: new goog.math.Size(20,30),
     submitBtn: new goog.math.Size(80,40),
@@ -228,12 +238,18 @@ dr.Scene.makeGameScene = function(director) {
   var prevBtn = new dr.Button("assets/play/prevBtn.png",comSize.prevBtn);
   prevBtn.setPosition(comPosition.prevBtn);
 
+  var quizFrame = new lime.Sprite().setAnchorPoint(0,0);
+  quizFrame.setFill("assets/play/frame.png");
+  quizFrame.setSize(comSize.quizFrame);
+  quizFrame.setPosition(comPosition.quizFrame);
+
   var quiz = new lime.Sprite().setAnchorPoint(0,0);
   // quiz.setFill(game.currentQuiz().getQuestionFrame());
   quiz.setPosition(comPosition.quiz);
   quiz.setSize(comSize.quiz);
   gamescene.quiz = quiz;
 
+  quizHolder.appendChild(quizFrame);
   quizHolder.appendChild(quiz);
   quizHolder.appendChild(menuBtn);
   quizHolder.appendChild(star);
@@ -276,6 +292,7 @@ dr.Scene.makeGameScene = function(director) {
   var shakeAni = lib.makeShakeAnimation(10);
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
     quiz.setPosition(comPosition.quiz);
+    quizFrame.setPosition(comPosition.quizFrame);
   });
 
   lib.setEvent(nextBtn,['touchstart','mousedown'],function() {
@@ -296,8 +313,10 @@ dr.Scene.makeGameScene = function(director) {
         refreshQuizFrame();
       } else
       quiz.runAction(shakeAni);
+      quizFrame.runAction(shakeAni);
     } else
       quiz.runAction(shakeAni);
+      quizFrame.runAction(shakeAni);
   });
   lib.setEvent(clearBtn,['touchstart','mousedown'],function() {
     board.clearBoard();
