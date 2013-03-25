@@ -27,36 +27,36 @@ dr.start = function(){
 
 
   var loadingscene = new lime.Scene();
-  // Gr5
-  loadingLayer = new lime.Layer();
-  loading = new lime.Sprite().setAnchorPoint(0,0).setSize(70,70);
-  loading.setPosition(108,170);
-
-  ent = new lime.Sprite();
-  ent.setFill('assets/G5.png');
-  ent.setSize(320,160);
-  ent.setPosition(160,220);
-  var production = new lime.Sprite();
-  production.setFill("assets/production.png");
-  production.setSize(320*0.75,160*0.75);
-  production.setPosition(160,280)
-
-  //group5
-
+  // Gr3
   // loadingLayer = new lime.Layer();
-  // loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
-  // loading.setPosition(110,120);
+  // loading = new lime.Sprite().setAnchorPoint(0,0).setSize(70,70);
+  // loading.setPosition(108,170);
 
   // ent = new lime.Sprite();
-  // ent.setFill('assets/group5.png');
-  // ent.setSize(320*.75,160*0.75);
-  // ent.setPosition(160,260);
-
-
+  // ent.setFill('assets/G3.png');
+  // ent.setSize(320,160);
+  // ent.setPosition(160,220);
   // var production = new lime.Sprite();
   // production.setFill("assets/production.png");
-  // production.setSize(320*0.5,160*0.5);
-  // production.setPosition(160,300)
+  // production.setSize(320*0.75,160*0.75);
+  // production.setPosition(160,280)
+
+  // group3
+
+  loadingLayer = new lime.Layer();
+  loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
+  loading.setPosition(110,120);
+
+  ent = new lime.Sprite();
+  ent.setFill('assets/group3.png');
+  ent.setSize(320*.8,160*0.8);
+  ent.setPosition(160,260);
+
+
+  var production = new lime.Sprite();
+  production.setFill("assets/production.png");
+  production.setSize(320*0.5,160*0.5);
+  production.setPosition(160,300)
 
 
 	var anim = new lime.animation.KeyframeAnimation();
