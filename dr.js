@@ -25,13 +25,40 @@ dr.start = function(){
   dr.director.setSize(dr.WIDTH,dr.HEIGHT);
   dr.director.makeMobileWebAppCapable();
 
+
   var loadingscene = new lime.Scene();
+  // Gr5
   loadingLayer = new lime.Layer();
-  loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
-  loading.setPosition(110,150);
-  lbl = new lime.Label().setText('Group 5').setFontFamily('Verdana').
-    setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(160,20);
-  lbl.setPosition(160,280);
+  loading = new lime.Sprite().setAnchorPoint(0,0).setSize(70,70);
+  loading.setPosition(108,170);
+
+  ent = new lime.Sprite();
+  ent.setFill('assets/G5.png');
+  ent.setSize(320,160);
+  ent.setPosition(160,220);
+  var production = new lime.Sprite();
+  production.setFill("assets/production.png");
+  production.setSize(320*0.75,160*0.75);
+  production.setPosition(160,280)
+
+  //group5
+
+  // loadingLayer = new lime.Layer();
+  // loading = new lime.Sprite().setAnchorPoint(0,0).setSize(100,100);
+  // loading.setPosition(110,120);
+
+  // ent = new lime.Sprite();
+  // ent.setFill('assets/group5.png');
+  // ent.setSize(320*.75,160*0.75);
+  // ent.setPosition(160,260);
+
+
+  // var production = new lime.Sprite();
+  // production.setFill("assets/production.png");
+  // production.setSize(320*0.5,160*0.5);
+  // production.setPosition(160,300)
+
+
 	var anim = new lime.animation.KeyframeAnimation();
 	for(var r=0;r<6;r++){
 	    for(var c=0;c<10;c++){
@@ -40,7 +67,8 @@ dr.start = function(){
 	}
 	loading.runAction(anim);
   loadingLayer.appendChild(loading);
-  loadingLayer.appendChild(lbl);
+  loadingLayer.appendChild(ent);
+  loadingLayer.appendChild(production);
   loadingscene.appendChild(loadingLayer);
 
   dr.director.replaceScene(loadingscene);
@@ -58,7 +86,7 @@ dr.start = function(){
     selectscene.transScenes["menuScene"] = menuscene;
     selectscene.transScenes["gameScene"] = gamescene;
     dr.director.replaceScene(menuscene);
-  },dr.director,0);
+  },dr.director,3000);
 
   lib.setBackground('assets/background.png',320,480);
 };
