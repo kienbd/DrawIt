@@ -417,18 +417,12 @@ dr.Scene.makeGameScene = function(director) {
   var refreshQuizFrame = function()
   {
     if(gamescene.game.isSolved(gamescene.game.currentID) == false ) {
-      //animation when show question
       quiz.setFill(gamescene.game.currentQuiz().getQuestionFrame());
     }
     else {
-      //animation when show answer
-      flipAni.setDuration(1);
-      quiz.runAction(flipAni);
-      goog.events.listenOnce(flipAni,lime.animation.Event.STOP,function(){
-        quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
-      });
-    return quiz;
+      quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
     }
+    return quiz;
   }
 
   var refreshQuizNavigatorButton = function()
