@@ -7,6 +7,7 @@ goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 goog.require('lime.animation.RotateTo');
 goog.require('lime.animation.MoveTo');
+goog.require('lime.animation.Loop');
 
 
 lib.loadjsfile = function loadScript(url, callback){
@@ -71,6 +72,23 @@ lib.makeShakeAnimation = function(opt) {
   var true_ani = new lime.animation.Sequence(aniM).enableOptimizations();
   return true_ani;
 };
+
+lib.makeBubleAnimation = function(opt) {
+  ani = [];
+  totalFrame = 2;
+  for(i=0;i<totalFrame;i++) {
+    if(i%2==0) {
+      ani[i] = new lime.animation.MoveBy(0,opt).enableOptimizations();
+    } else {
+      ani[i] = new lime.animation.MoveBy(0,opt*-1).enableOptimizations();
+    }
+    ani[i].setEasing(lime.animation.Easing.EASE);
+    ani[i].setDuration(0.5);
+  }
+
+  var true_ani = new lime.animation.Loop(new lime.animation.Sequence(ani).enableOptimizations());
+  return true_ani;
+}
 
 lib.setBackground = function(bkg_url,w,h) {
 var css = 'body { background-image: url(' + bkg_url + ');' + 'background-repeat: no-repeat;background-position: 0 0;' + 'background-size: ' + w + 'px '+ h + 'px;',

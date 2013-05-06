@@ -86,7 +86,7 @@ dr.start = function(){
     selectscene.transScenes["menuScene"] = menuscene;
     selectscene.transScenes["gameScene"] = gamescene;
     dr.director.replaceScene(menuscene);
-  },dr.director,3000);
+  },dr.director,0);
 
   lib.setBackground('assets/background.png',320,480);
 };
