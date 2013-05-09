@@ -71,7 +71,7 @@ dr.Scene.makeMenuScene = function(director) {
   var playBtn = new dr.Button('assets/menu/playBtn.png',comSize.menuBtn);
   playBtn.setPosition(comPosition.playBtn);
 
-  var aboutBtn = new dr.Button('assets/menu/shopBtn.png',comSize.menuBtn);
+  var aboutBtn = new dr.Button('assets/menu/aboutBtn.png',comSize.menuBtn);
   aboutBtn.setPosition(comPosition.aboutBtn);
 
   var settingBtn = new dr.Button('assets/menu/settingBtn.png',comSize.menuBtn);
@@ -132,16 +132,16 @@ dr.Scene.makeSettingScene = function(director) {
   menuBtn.setPosition(comPosition.menuBtn);
 
   volLbl = new lime.Sprite();
-  volLbl.setFill('#FFFFFF').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
+  volLbl.setFill('assets/setting/volume.png').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
 
-  vol_s = new lime.Sprite();
-  vol_s.setFill("#EDACD1").setSize(comSize.switcher).setPosition(220,150).setAnchorPoint(0,0);
+  vol_s = new dr.Button('assets/setting/switcher.png',comSize.switcher);
+  vol_s.setPosition(220,150);
 
   hintLbl = new lime.Sprite();
-  hintLbl.setFill('#000000').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
+  hintLbl.setFill('assets/setting/hint.png').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
 
-  hint_s = new lime.Sprite();
-  hint_s.setFill("#EDACD1").setSize(comSize.switcher).setPosition(220,250).setAnchorPoint(0,0);
+  hint_s = new dr.Button('assets/setting/switcher.png',comSize.switcher);
+  hint_s.setPosition(220,250);
 
   var layout = new lime.Layer();
   layout.setPosition(0,0);
@@ -160,7 +160,6 @@ dr.Scene.makeSettingScene = function(director) {
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     director.replaceScene(settingScene.transScenes["menuScene"]);
   });
-
 
   return settingScene;
 };
@@ -508,17 +507,17 @@ dr.Scene.makeGameScene = function(director) {
         } else {
           if(gamescene.hint.getHidden()) {
             shakeAni.play();
-            goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+            // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
               gamescene.board.isReady = true;
-            },null,0)
+            // },null,0)
           }
         }
       } else {
         if(gamescene.hint.getHidden()) {
           shakeAni.play();
-          goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+          // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
-          },null,0)
+          // },null,0)
         }
       }
     }

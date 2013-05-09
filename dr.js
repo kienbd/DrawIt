@@ -7,9 +7,8 @@ goog.require('lime.Director');
 goog.require('lime.Scene');
 goog.require('lime.Layer');
 goog.require('lime.animation.KeyframeAnimation');
-
 goog.require('lime');
-
+goog.require('lime.audio.Audio');
 // components
 goog.require('lib');
 goog.require('dr.Scene');
@@ -25,6 +24,8 @@ dr.start = function(){
     dr.director = new lime.Director(document.body);
     dr.director.setSize(dr.WIDTH,dr.HEIGHT);
     dr.director.makeMobileWebAppCapable();
+
+    lib.loopSound('sound0'); //see in lib
 
     var loadingscene = new lime.Scene();
 
