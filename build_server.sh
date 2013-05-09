@@ -6,6 +6,7 @@ rm -rf compiled/
 mkdir -p compiled/assets/answers
 cp -R assets/* compiled/assets/
 rm -rf compiled/*.manifest
+cp dr.manifest compiled/dr.manifest
 
 cd compiled/
 php -S $1

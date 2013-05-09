@@ -4,6 +4,7 @@ goog.require('lime');
 goog.require('dr.Quiz');
 
 dr.Game = function(packName) {
+  this.name = packName;
   this.allQuiz = [];
   for(i=0;i<dr.Game.QUIZNUM;i++) {
     var quiz = new dr.Quiz("assets/" + packName + "/quiz" + i + ".png");

@@ -48,15 +48,15 @@ dr.Scene.makeMenuScene = function(director) {
     logo: new goog.math.Coordinate(0,0),
     btnHolder: new goog.math.Coordinate(0,140),
     playBtn: new goog.math.Coordinate(80,20),
-    shopBtn: new goog.math.Coordinate(80,120),
-    settingBtn: new goog.math.Coordinate(80,230)
+    settingBtn: new goog.math.Coordinate(80,120),
+    aboutBtn: new goog.math.Coordinate(80,230)
   };
 
   var comSize = {
     logo: new goog.math.Size(320,160),
     menuBtn: new goog.math.Size(160,60)
   };
-  var menuScene = new dr.Scene;
+  var menuScene = new dr.Scene();
 
   var logoHolder = new lime.Layer();
   logo = new lime.Sprite();
@@ -71,15 +71,15 @@ dr.Scene.makeMenuScene = function(director) {
   var playBtn = new dr.Button('assets/menu/playBtn.png',comSize.menuBtn);
   playBtn.setPosition(comPosition.playBtn);
 
-  var shopBtn = new dr.Button('assets/menu/shopBtn.png',comSize.menuBtn);
-  shopBtn.setPosition(comPosition.shopBtn);
+  var aboutBtn = new dr.Button('assets/menu/aboutBtn.png',comSize.menuBtn);
+  aboutBtn.setPosition(comPosition.aboutBtn);
 
   var settingBtn = new dr.Button('assets/menu/settingBtn.png',comSize.menuBtn);
   settingBtn.setPosition(comPosition.settingBtn);
 
   btnHolder.appendChild(playBtn);
-  btnHolder.appendChild(shopBtn);
   btnHolder.appendChild(settingBtn);
+  btnHolder.appendChild(aboutBtn);
 
 
   menuScene.appendChild(logoHolder);
@@ -96,17 +96,160 @@ dr.Scene.makeMenuScene = function(director) {
     }
   });
 
-  lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["shopScene"]);
+  lib.setEvent(aboutBtn,['touchstart','mousedown'],function(){
+
+    lime.scheduleManager.callAfter(function() {
+      director.replaceScene(menuScene.transScenes["aboutScene"]);
+    },null,250);
   });
 
   lib.setEvent(settingBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["settingScene"]);
+    lime.scheduleManager.callAfter(function() {
+      director.replaceScene(menuScene.transScenes["settingScene"]);
+    },null,250);
   });
 
   return menuScene;
 
 };
+
+dr.Scene.makeSettingScene = function(director) {
+  var settingScene = new dr.Scene();
+
+  var comPosition = {
+    menuBtn: new goog.math.Coordinate(0,5),
+    volLbl: new goog.math.Coordinate(30,150),
+    hintLbl: new goog.math.Coordinate(30,250),
+    lbl: new goog.math.Coordinate(160,70)
+  };
+
+  var comSize = {
+    menuBtn: new goog.math.Size(50,30),
+    volLbl: new goog.math.Size(150,60),
+    hintLbl: new goog.math.Size(150,60),
+    switcher: new goog.math.Size(60,60),
+    lbl: new goog.math.Size(225,87)
+  };
+
+
+  var lbl = new lime.Sprite();
+  lbl.setFill('assets/setting/setting.png');
+  lbl.setSize(comSize.lbl);
+  lbl.setPosition(comPosition.lbl);
+
+  menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
+  menuBtn.setPosition(comPosition.menuBtn);
+
+  var volLbl = new lime.Sprite();
+  volLbl.setFill('assets/setting/volume.png').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
+
+  vol_s = new lime.Sprite();
+  if(window.localStorage.getItem("vol")) {
+    vol_s.selected = JSON.parse(window.localStorage.getItem("vol"));
+    if(vol_s.selected)
+      vol_s.setFill('assets/setting/selected.png');
+    else
+      vol_s.setFill('assets/setting/select.png');
+  }
+  else {
+    vol_s.setFill('assets/setting/selected.png');
+    vol_s.selected = true;
+    window.localStorage.setItem("vol",true);
+  }
+  vol_s.setSize(comSize.switcher).setPosition(220,150).setAnchorPoint(0,0);
+
+  var hintLbl = new lime.Sprite();
+  hintLbl.setFill('assets/setting/hint.png').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
+
+  hint_s = new lime.Sprite();
+  if(window.localStorage.getItem("hint")) {
+    hint_s.selected = JSON.parse(window.localStorage.getItem("hint"));
+    if(hint_s.selected)
+      hint_s.setFill('assets/setting/selected.png');
+    else
+      hint_s.setFill('assets/setting/select.png');
+  }
+  else {
+    hint_s.setFill('assets/setting/selected.png');
+    hint_s.selected = true;
+    window.localStorage.setItem("hint",true);
+  }
+  hint_s.setSize(comSize.switcher).setPosition(220,250).setAnchorPoint(0,0);
+
+  var layout = new lime.Layer();
+  layout.setPosition(0,0);
+  layout.appendChild(lbl);
+  layout.appendChild(menuBtn);
+  layout.appendChild(volLbl);
+  layout.appendChild(vol_s);
+  layout.appendChild(hintLbl);
+  layout.appendChild(hint_s);
+
+
+  settingScene.appendChild(layout);
+
+  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(settingScene.transScenes["menuScene"]);
+  });
+
+  goog.events.listen(vol_s,['touchstart','mousedown'],function() {
+    if(!vol_s.selected) {
+      vol_s.selected = true;
+      window.localStorage.setItem("vol",true);
+      vol_s.setFill('assets/setting/selected.png');
+    }
+    else {
+      vol_s.selected = false;
+      window.localStorage.setItem("vol",false);
+      vol_s.setFill('assets/setting/select.png');
+    }
+  });
+
+  goog.events.listen(hint_s,['touchstart','mousedown'],function() {
+    if(!hint_s.selected) {
+      hint_s.selected = true;
+      window.localStorage.setItem("hint",true);
+      hint_s.setFill('assets/setting/selected.png');
+    }
+    else {
+      hint_s.selected = false;
+      window.localStorage.setItem("hint",false);
+      hint_s.setFill('assets/setting/select.png');
+    }
+  });
+
+  return settingScene;
+};
+
+dr.Scene.makeAboutScene = function(director) {
+  var aboutScene = new dr.Scene();
+
+  var comPosition = {
+    menuBtn: new goog.math.Coordinate(0,5)
+  };
+
+  var comSize = {
+    menuBtn: new goog.math.Size(50,30)
+  };
+
+  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
+  menuBtn.setPosition(comPosition.menuBtn);
+
+  var layout = new lime.Layer();
+  layout.setPosition(0,0);
+  layout.appendChild(menuBtn);
+
+  aboutScene.appendChild(layout);
+
+
+  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(aboutScene.transScenes['menuScene']);
+  });
+
+  return aboutScene;
+
+};
+
 
 dr.Scene.makeSelectScene = function(director) {
 
@@ -116,7 +259,7 @@ dr.Scene.makeSelectScene = function(director) {
     topLayer: new goog.math.Coordinate(0,0),
     lbl: new goog.math.Coordinate(160,50),
     packHolder: new goog.math.Coordinate(0,60),
-    funcBtn: new goog.math.Coordinate(0,0),
+    funcBtn: new goog.math.Coordinate(0,5),
     pack1: new goog.math.Coordinate(15,20),
     pack2: new goog.math.Coordinate(115,20),
     pack3: new goog.math.Coordinate(215,20),
@@ -138,6 +281,8 @@ dr.Scene.makeSelectScene = function(director) {
 
   funcBtn = new lime.Layer().setPosition(comPosition.funcBtn);
 
+  selectScene.packes = [];
+
   var lbl = new lime.Sprite();
   lbl.setFill('assets/play/playLabel.png');
   lbl.setSize(comSize.lbl);
@@ -157,20 +302,23 @@ dr.Scene.makeSelectScene = function(director) {
     star = new lime.Sprite();
     star.setFill('assets/play/star.png');
     star.setSize(comSize.star);
-    star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
-    lbl = new lime.Label().setFontFamily('Verdana').
-      setFontColor('#c00').setFontSize(12).setFontWeight('bold').setSize(20,20).setAnchorPoint(0,0);
-    text = Math.floor(Math.random()*20) + 1 + "/30";
+    star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 25);
+    var lbl = new lime.Label().setFontFamily('Verdana').
+      setFontColor('#fff93c').setFontSize(22).setFontWeight('bold').setSize(23,23).setAnchorPoint(0,0);
+    if(!window.localStorage.getItem("pack"+(i+1)))
+      window.localStorage.setItem("pack"+(i+1),0);
+    text = window.localStorage.getItem("pack" + (i+1)) || "";
     lbl.setText(text);
-    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -55,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
-    star.setRotation(20);
-    lbl.setRotation(10);
+    lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -52,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
+    star.setRotation(40);
+    lbl.setRotation(30);
+    selectScene.packes.push(lbl);
 
 
     roll = new lime.Sprite();
     roll.setFill('assets/roll.png');
-    roll.setSize(60,50);
-    roll.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -55,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 32);
+    roll.setSize(80,60);
+    roll.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -45,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 38);
 
 
     packHolder.appendChild(pack);
@@ -222,11 +370,11 @@ dr.Scene.makeSelectScene = function(director) {
 };
 
 dr.Scene.makeGameScene = function(director) {
-  var gamescene = new dr.Scene;
+  var gamescene = new dr.Scene();
 
   comPosition = {
     quizHolder: new goog.math.Coordinate(0,0),
-    menuBtn: new goog.math.Coordinate(0,0),
+    menuBtn: new goog.math.Coordinate(0,5),
     star: new goog.math.Coordinate(295,15),
     quiz: new goog.math.Coordinate(52+216/2,47+156/2),
     quizFrame: new goog.math.Coordinate(40+240/2,35+180/2),
@@ -338,7 +486,7 @@ dr.Scene.makeGameScene = function(director) {
 
 
   var hintHolder = new lime.Layer();
-  hintHolder.setPosition(10,225);
+  hintHolder.setPosition(10,265);
   var hint = new lime.Sprite().setAnchorPoint(0,0);
   hint.setSize(150,60).setPosition(0,0);
   hint.setFill('#FFFFFF');
@@ -356,8 +504,12 @@ dr.Scene.makeGameScene = function(director) {
   var flipAni = new lime.animation.ColorTo('#000000');
   var bubleAni = new lib.makeBubleAnimation(10);
 
+  gamescene.bubleAni = bubleAni;
+
   hint.setHidden(true);
-  hint.runAction(bubleAni);
+  bubleAni.addTarget(hint);
+  shakeAni.addTarget(quiz);
+  shakeAni.addTarget(quizFrame);
 
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
     quiz.setPosition(comPosition.quiz);
@@ -370,7 +522,7 @@ dr.Scene.makeGameScene = function(director) {
 
 
   goog.events.listen(hint,['touchstart','mousedown'],function() {
-
+    bubleAni.stop();
     lime.scheduleManager.callAfter(function() {
       hint.setHidden(true);
      },null,20);
@@ -389,7 +541,7 @@ dr.Scene.makeGameScene = function(director) {
     }
   });
   lib.setEvent(submitBtn,['touchstart','mousedown'],function() {
-    if(gamescene.board.isReady && gamescene.hint.getHidden()) {
+    if(gamescene.board.isReady) {
       result = gamescene.board.submit();
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
@@ -415,14 +567,22 @@ dr.Scene.makeGameScene = function(director) {
             },null,2000);
           });
         } else {
-          window.sounds['assets/wrong.mp3'].play();
-          quiz.runAction(shakeAni);
-          quizFrame.runAction(shakeAni);
+          if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
+            window.sounds['assets/wrong.mp3'].play();
+            shakeAni.play();
+            // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+            gamescene.board.isReady = true;
+            // },null,0)
+          }
         }
       } else {
-        window.sounds['assets/wrong.mp3'].play();
-        quiz.runAction(shakeAni);
-        quizFrame.runAction(shakeAni);
+        if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
+          window.sounds['assets/wrong.mp3'].play();
+          shakeAni.play();
+          // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+          gamescene.board.isReady = true;
+          // },null,0)
+        }
       }
     }
   });
@@ -436,6 +596,9 @@ dr.Scene.makeGameScene = function(director) {
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     if(gamescene.loaded) {
       gamescene.transScenes['selectScene'].loaded = false;
+      gamescene.transScenes['selectScene'].packes.forEach(function(e,i) {
+        e.setText(window.localStorage.getItem("pack"+(i+1)) || "");
+      });
       director.replaceScene(gamescene.transScenes['selectScene']);
       gamescene.transScenes['selectScene'].loaded = true;
     }
@@ -472,6 +635,10 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshScore = function() {
     lbl.setText(gamescene.game.score);
+    if(window.localStorage.getItem(gamescene.game.name)) {
+      if(JSON.parse(window.localStorage.getItem(gamescene.name)) < gamescene.game.score)
+        window.localStorage.setItem(gamescene.game.name,gamescene.game.score);
+    }
   }
 
   var refreshQuizFrame = function()
@@ -504,8 +671,14 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshHint = function() {
     left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
-    if(left > 0)
-      gamescene.hint.setHidden(false);
+
+    if(JSON.parse(window.localStorage.getItem('hint'))) {
+      if(left > 0) {
+        gamescene.bubleAni.play();
+        gamescene.hint.setHidden(false);
+      }
+    } else
+      gamescene.hint.setHidden(true);
   }
 
   var refreshRemain = function() {
@@ -514,14 +687,6 @@ dr.Scene.makeGameScene = function(director) {
   }
 
   return gamescene;
-};
-
-dr.Scene.makeSettingScene = function() {
-
-};
-
-dr.Scene.makeShopScene = function() {
-
 };
 
 dr.Scene.reloadGameScene = function(gamescene,packname) {

@@ -20,6 +20,7 @@ dr.WIDTH = 320;
 dr.HEIGHT = 480;
 
 dr.start = function(){
+
   lib.loadPxLoader(function(){
     //director
     dr.director = new lime.Director(document.body);
@@ -78,13 +79,26 @@ dr.start = function(){
     var menuscene;
     var selectscene;
     var gamescene;
+    var aboutscene;
+    var settingscene;
     lime.scheduleManager.callAfter(function() {
       menuscene = dr.Scene.makeMenuScene(dr.director);
       selectscene = dr.Scene.makeSelectScene(dr.director);
+      aboutscene = dr.Scene.makeAboutScene(dr.director);
       gamescene = dr.Scene.makeGameScene(dr.director);
+      settingscene = dr.Scene.makeSettingScene(dr.director);
+
       gamescene.transScenes["menuScene"] = menuscene;
       gamescene.transScenes["selectScene"] = selectscene;
+
       menuscene.transScenes["selectScene"] = selectscene;
+      menuscene.transScenes["aboutScene"] = aboutscene;
+      menuscene.transScenes["settingScene"] = settingscene;
+
+      aboutscene.transScenes["menuScene"] = menuscene;
+      settingscene.transScenes["menuScene"] = menuscene;
+      settingscene.transScenes["gameScene"] = gamescene;
+
       selectscene.transScenes["menuScene"] = menuscene;
       selectscene.transScenes["gameScene"] = gamescene;
       dr.director.replaceScene(menuscene);

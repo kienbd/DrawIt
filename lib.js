@@ -68,7 +68,6 @@ lib.makeShakeAnimation = function(opt) {
     aniM[i+1].setDuration(0.01);
   }
 
-
   var true_ani = new lime.animation.Sequence(aniM).enableOptimizations();
   return true_ani;
 };
