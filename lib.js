@@ -107,33 +107,67 @@ var css = 'body { background-image: url(' + bkg_url + ');' + 'background-repeat:
 }
 
 lib.loadPxLoader = function(callback) {
-  var arr =['PxLoader.js','PxLoaderImage.js','PxLoaderSound.js','PxLoaderVideo.js'];
+  var arr =['PxLoader.js','PxLoaderImage.js','soundManager2.js','PxLoaderSound.js','PxLoaderVideo.js'];
   var len = arr.length;
   lib.loadjsfile('assets/js/pxloader/' + arr[0],function(){
     lib.loadjsfile('assets/js/pxloader/' + arr[1],function(){
       lib.loadjsfile('assets/js/pxloader/' + arr[2],function(){
         lib.loadjsfile('assets/js/pxloader/' + arr[3],function(){
-          var loader = new PxLoader();
-          var images = [
-            'background.png','group3.png','production.png','icon.png','popup.png','spinner_sheet.png',
-            'menu/logo.png','menu/logo1.png','menu/playBtn.png','menu/settingBtn.png','menu/shopBtn.png',
-            'play/1.png','play/board.png','play/clearBtn.png','play/frame.png','play/menuBtn.png','play/nextBtn.png',
-            'play/playLabel.png','play/prevBtn.png','play/star.png','play/submitBtn.png','play/undoBtn.png'
-          ]
+          lib.loadjsfile('assets/js/pxloader/' + arr[4],function(){
+            var loader = new PxLoader();
 
-          for (var i = 0; i < images.length; i++) {
-            console.log(images[i]);
-            loader.addImage('assets/'+ images[i]);
-          }
+            var images = [
+              'background.png','group3.png','production.png','icon.png','popup.png','spinner_sheet.png',
+              'menu/logo.png','menu/logo1.png','menu/playBtn.png','menu/settingBtn.png','menu/shopBtn.png',
+              'play/1.png','play/board.png','play/clearBtn.png','play/frame.png','play/menuBtn.png','play/nextBtn.png',
+              'play/playLabel.png','play/prevBtn.png','play/star.png','play/submitBtn.png','play/undoBtn.png'
+            ]
+            for (var i = 0; i < images.length; i++) {
+              // console.log(images[i]);
+              loader.addImage('assets/'+ images[i]);
+            }
 
-          loader.addCompletionListener(function() {
-            callback();
+
+            var sounds = ['assets/a.mp3']; // vi tri dau tien cua mang la theme sound
+            // init soundmanager
+            soundManager.url = 'soundManager2/';
+            // soundManager.flashVersion = 9;
+            soundManager.useHighPerformance = true;
+            // soundManager.flashLoadTimeout = 500;
+
+            // soundManager.ontimeout(function(status){
+              soundManager.userHTML5Audio = true;
+              soundManager.preferFlash = false;
+              soundManager.reboot();
+            // });
+
+            soundManager.onready(function(){
+              for (var i = 0; i < sounds.length; i++) {
+                // console.log(sounds[i]);
+                if (!soundManager.canPlayURL(sounds[i]))
+                  continue;
+                loader.addSound('sound'+i.toString(),sounds[i]);
+
+              }
+              loader.addCompletionListener(function() {
+                callback();
+              });
+              loader.start();
+            });
+
           });
-          loader.start();
-
         });
       });
     });
   });
 }
 
+lib.loopSound = function(sid) {
+  window.setTimeout(function(){
+    soundManager.play(sid,{
+      onfinish: function(){
+        lib.loopSound(sid);
+      }
+    });
+  },1);
+}
