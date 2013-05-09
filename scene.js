@@ -554,7 +554,6 @@ dr.Scene.makeGameScene = function(director) {
           aniC = new lime.animation.ColorTo('#000000');
           aniC.setDuration(1);
           quiz.runAction(aniC);
-          bubleAni.play();
           goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
             quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
             //auto change quiz
@@ -567,7 +566,7 @@ dr.Scene.makeGameScene = function(director) {
             },null,2000);
           });
         } else {
-          if(gamescene.hint.getHidden()) {
+          if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
             shakeAni.play();
             // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
               gamescene.board.isReady = true;
@@ -575,7 +574,7 @@ dr.Scene.makeGameScene = function(director) {
           }
         }
       } else {
-        if(gamescene.hint.getHidden()) {
+          if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
           shakeAni.play();
           // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
@@ -669,10 +668,14 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshHint = function() {
     left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
-    if(left > 0) {
-      gamescene.bubleAni.play();
-      gamescene.hint.setHidden(false);
-    }
+
+    if(JSON.parse(window.localStorage.getItem('hint'))) {
+      if(left > 0) {
+        gamescene.bubleAni.play();
+        gamescene.hint.setHidden(false);
+      }
+    } else
+        gamescene.hint.setHidden(true);
   }
 
   var refreshRemain = function() {

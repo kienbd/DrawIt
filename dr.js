@@ -97,6 +97,7 @@ dr.start = function(){
 
       aboutscene.transScenes["menuScene"] = menuscene;
       settingscene.transScenes["menuScene"] = menuscene;
+      settingscene.transScenes["gameScene"] = gamescene;
 
       selectscene.transScenes["menuScene"] = menuscene;
       selectscene.transScenes["gameScene"] = gamescene;
