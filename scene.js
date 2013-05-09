@@ -56,7 +56,7 @@ dr.Scene.makeMenuScene = function(director) {
     logo: new goog.math.Size(320,160),
     menuBtn: new goog.math.Size(160,60)
   };
-  var menuScene = new dr.Scene;
+  var menuScene = new dr.Scene();
 
   var logoHolder = new lime.Layer();
   logo = new lime.Sprite();
@@ -97,16 +97,78 @@ dr.Scene.makeMenuScene = function(director) {
   });
 
   lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["shopScene"]);
+    lime.scheduleManager.callAfter(function() {
+      director.replaceScene(menuScene.transScenes["shopScene"]);
+    },null,250);
   });
 
   lib.setEvent(settingBtn,['touchstart','mousedown'],function(){
-    director.replaceScene(menuScene.transScenes["settingScene"]);
+    lime.scheduleManager.callAfter(function() {
+      director.replaceScene(menuScene.transScenes["settingScene"]);
+    },null,250);
   });
 
   return menuScene;
 
 };
+
+dr.Scene.makeSettingScene = function(director) {
+  var settingScene = new dr.Scene();
+
+  var comPosition = {
+    menuBtn: new goog.math.Coordinate(0,5)
+  };
+
+  var comSize = {
+    menuBtn: new goog.math.Size(50,30)
+  };
+
+  menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
+  menuBtn.setPosition(comPosition.menuBtn);
+
+  var layout = new lime.Layer();
+  layout.setPosition(0,0);
+  layout.appendChild(menuBtn);
+
+  settingScene.appendChild(layout);
+
+  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(settingScene.transScenes["menuScene"]);
+  });
+
+
+  return settingScene;
+};
+
+dr.Scene.makeShopScene = function(director) {
+  var shopScene = new dr.Scene();
+
+  var comPosition = {
+    menuBtn: new goog.math.Coordinate(0,5)
+  };
+
+  var comSize = {
+    menuBtn: new goog.math.Size(50,30)
+  };
+
+  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
+  menuBtn.setPosition(comPosition.menuBtn);
+
+  var layout = new lime.Layer();
+  layout.setPosition(0,0);
+  layout.appendChild(menuBtn);
+
+  shopScene.appendChild(layout);
+
+
+  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
+    director.replaceScene(shopScene.transScenes['menuScene']);
+  });
+
+  return shopScene;
+
+};
+
 
 dr.Scene.makeSelectScene = function(director) {
 
@@ -222,7 +284,7 @@ dr.Scene.makeSelectScene = function(director) {
 };
 
 dr.Scene.makeGameScene = function(director) {
-  var gamescene = new dr.Scene;
+  var gamescene = new dr.Scene();
 
   comPosition = {
     quizHolder: new goog.math.Coordinate(0,0),
@@ -360,6 +422,8 @@ dr.Scene.makeGameScene = function(director) {
 
   hint.setHidden(true);
   bubleAni.addTarget(hint);
+  shakeAni.addTarget(quiz);
+  shakeAni.addTarget(quizFrame);
 
   goog.events.listen(shakeAni,lime.animation.Event.STOP,function(){
     quiz.setPosition(comPosition.quiz);
@@ -418,8 +482,7 @@ dr.Scene.makeGameScene = function(director) {
           });
         } else {
           if(gamescene.hint.getHidden()) {
-            quiz.runAction(shakeAni);
-            quizFrame.runAction(shakeAni);
+            shakeAni.play();
           }
           goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
@@ -427,8 +490,7 @@ dr.Scene.makeGameScene = function(director) {
         }
       } else {
           if(gamescene.hint.getHidden()) {
-            quiz.runAction(shakeAni);
-            quizFrame.runAction(shakeAni);
+            shakeAni.play();
           }
           goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
@@ -526,73 +588,6 @@ dr.Scene.makeGameScene = function(director) {
   }
 
   return gamescene;
-};
-
-dr.Scene.makeSettingScene = function(director) {
-  var settingScene = new dr.Scene;
-
-  comPosition = {
-    menuBtn: new goog.math.Coordinate(0,5)
-  };
-
-  var comSize = {
-    menuBtn: new goog.math.Size(50,30)
-  };
-
-  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
-  menuBtn.setPosition(comPosition.menuBtn);
-
-  var layout = new lime.Layer();
-  layout.setPosition(0,0);
-  layout.appendChild(menuBtn);
-
-  settingScene.appendChild(layout);
-
-
-  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    if(settingScene.loaded) {
-      settingScene.transScenes['menuScene'].loaded = false;
-      director.replaceScene(settingScene.transScenes['menuScene']);
-      settingScene.transScenes['menuScene'].loaded = true;
-    }
-  });
-
-  return settingScene;
-
-
-};
-
-dr.Scene.makeShopScene = function(director) {
-  var shopScene = new dr.Scene;
-
-  comPosition = {
-    menuBtn: new goog.math.Coordinate(0,5)
-  };
-
-  var comSize = {
-    menuBtn: new goog.math.Size(50,30)
-  };
-
-  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
-  menuBtn.setPosition(comPosition.menuBtn);
-
-  var layout = new lime.Layer();
-  layout.setPosition(0,0);
-  layout.appendChild(menuBtn);
-
-  shopScene.appendChild(layout);
-
-
-  lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    if(shopScene.loaded) {
-      shopScene.transScenes['menuScene'].loaded = false;
-      director.replaceScene(shopScene.transScenes['menuScene']);
-      shopScene.transScenes['menuScene'].loaded = true;
-    }
-  });
-
-  return shopScene;
-
 };
 
 dr.Scene.reloadGameScene = function(gamescene,packname) {
