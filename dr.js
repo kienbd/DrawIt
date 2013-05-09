@@ -77,12 +77,12 @@ dr.start = function(){
     var menuscene;
     var selectscene;
     var gamescene;
-    var shopscene;
+    var aboutscene;
     var settingscene;
     lime.scheduleManager.callAfter(function() {
       menuscene = dr.Scene.makeMenuScene(dr.director);
       selectscene = dr.Scene.makeSelectScene(dr.director);
-      shopscene = dr.Scene.makeShopScene(dr.director);
+      aboutscene = dr.Scene.makeAboutScene(dr.director);
       gamescene = dr.Scene.makeGameScene(dr.director);
       settingscene = dr.Scene.makeSettingScene(dr.director);
 
@@ -90,10 +90,10 @@ dr.start = function(){
       gamescene.transScenes["selectScene"] = selectscene;
 
       menuscene.transScenes["selectScene"] = selectscene;
-      menuscene.transScenes["shopScene"] = shopscene;
+      menuscene.transScenes["aboutScene"] = aboutscene;
       menuscene.transScenes["settingScene"] = settingscene;
 
-      shopscene.transScenes["menuScene"] = menuscene;
+      aboutscene.transScenes["menuScene"] = menuscene;
       settingscene.transScenes["menuScene"] = menuscene;
 
       selectscene.transScenes["menuScene"] = menuscene;

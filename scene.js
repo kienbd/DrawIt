@@ -48,8 +48,8 @@ dr.Scene.makeMenuScene = function(director) {
     logo: new goog.math.Coordinate(0,0),
     btnHolder: new goog.math.Coordinate(0,140),
     playBtn: new goog.math.Coordinate(80,20),
-    shopBtn: new goog.math.Coordinate(80,120),
-    settingBtn: new goog.math.Coordinate(80,230)
+    settingBtn: new goog.math.Coordinate(80,120),
+    aboutBtn: new goog.math.Coordinate(80,230)
   };
 
   var comSize = {
@@ -71,15 +71,15 @@ dr.Scene.makeMenuScene = function(director) {
   var playBtn = new dr.Button('assets/menu/playBtn.png',comSize.menuBtn);
   playBtn.setPosition(comPosition.playBtn);
 
-  var shopBtn = new dr.Button('assets/menu/shopBtn.png',comSize.menuBtn);
-  shopBtn.setPosition(comPosition.shopBtn);
+  var aboutBtn = new dr.Button('assets/menu/shopBtn.png',comSize.menuBtn);
+  aboutBtn.setPosition(comPosition.aboutBtn);
 
   var settingBtn = new dr.Button('assets/menu/settingBtn.png',comSize.menuBtn);
   settingBtn.setPosition(comPosition.settingBtn);
 
   btnHolder.appendChild(playBtn);
-  btnHolder.appendChild(shopBtn);
   btnHolder.appendChild(settingBtn);
+  btnHolder.appendChild(aboutBtn);
 
 
   menuScene.appendChild(logoHolder);
@@ -96,9 +96,9 @@ dr.Scene.makeMenuScene = function(director) {
     }
   });
 
-  lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
+  lib.setEvent(aboutBtn,['touchstart','mousedown'],function(){
     lime.scheduleManager.callAfter(function() {
-      director.replaceScene(menuScene.transScenes["shopScene"]);
+      director.replaceScene(menuScene.transScenes["aboutScene"]);
     },null,250);
   });
 
@@ -116,19 +116,44 @@ dr.Scene.makeSettingScene = function(director) {
   var settingScene = new dr.Scene();
 
   var comPosition = {
-    menuBtn: new goog.math.Coordinate(0,5)
+    menuBtn: new goog.math.Coordinate(0,5),
+    volLbl: new goog.math.Coordinate(30,150),
+    hintLbl: new goog.math.Coordinate(30,250)
   };
 
   var comSize = {
-    menuBtn: new goog.math.Size(50,30)
+    menuBtn: new goog.math.Size(50,30),
+    volLbl: new goog.math.Size(150,60),
+    hintLbl: new goog.math.Size(150,60),
+    switcher: new goog.math.Size(60,60)
   };
 
   menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
 
+  volLbl = new lime.Sprite();
+  volLbl.setFill('#FFFFFF').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
+
+  vol_s = new lime.Sprite();
+  vol_s.setFill("#EDACD1").setSize(comSize.switcher).setPosition(220,150).setAnchorPoint(0,0);
+
+  hintLbl = new lime.Sprite();
+  hintLbl.setFill('#000000').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
+
+  hint_s = new lime.Sprite();
+  hint_s.setFill("#EDACD1").setSize(comSize.switcher).setPosition(220,250).setAnchorPoint(0,0);
+
   var layout = new lime.Layer();
   layout.setPosition(0,0);
   layout.appendChild(menuBtn);
+  layout.appendChild(volLbl);
+  layout.appendChild(vol_s);
+  layout.appendChild(hintLbl);
+  layout.appendChild(hint_s);
+
+
+
+
 
   settingScene.appendChild(layout);
 
@@ -140,8 +165,8 @@ dr.Scene.makeSettingScene = function(director) {
   return settingScene;
 };
 
-dr.Scene.makeShopScene = function(director) {
-  var shopScene = new dr.Scene();
+dr.Scene.makeAboutScene = function(director) {
+  var aboutScene = new dr.Scene();
 
   var comPosition = {
     menuBtn: new goog.math.Coordinate(0,5)
@@ -158,14 +183,14 @@ dr.Scene.makeShopScene = function(director) {
   layout.setPosition(0,0);
   layout.appendChild(menuBtn);
 
-  shopScene.appendChild(layout);
+  aboutScene.appendChild(layout);
 
 
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(shopScene.transScenes['menuScene']);
+    director.replaceScene(aboutScene.transScenes['menuScene']);
   });
 
-  return shopScene;
+  return aboutScene;
 
 };
 
@@ -483,18 +508,18 @@ dr.Scene.makeGameScene = function(director) {
         } else {
           if(gamescene.hint.getHidden()) {
             shakeAni.play();
+            goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+              gamescene.board.isReady = true;
+            },null,0)
           }
+        }
+      } else {
+        if(gamescene.hint.getHidden()) {
+          shakeAni.play();
           goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
           },null,0)
         }
-      } else {
-          if(gamescene.hint.getHidden()) {
-            shakeAni.play();
-          }
-          goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
-            gamescene.board.isReady = true;
-          },null,0)
       }
     }
   });
