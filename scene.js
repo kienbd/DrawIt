@@ -393,6 +393,7 @@ dr.Scene.makeGameScene = function(director) {
       result = gamescene.board.submit();
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
+          window.sounds['assets/true.mp3'].play();
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
           nextBtn.clickStatus = "unavail";
@@ -414,10 +415,12 @@ dr.Scene.makeGameScene = function(director) {
             },null,2000);
           });
         } else {
+          window.sounds['assets/wrong.mp3'].play();
           quiz.runAction(shakeAni);
           quizFrame.runAction(shakeAni);
         }
       } else {
+        window.sounds['assets/wrong.mp3'].play();
         quiz.runAction(shakeAni);
         quizFrame.runAction(shakeAni);
       }
