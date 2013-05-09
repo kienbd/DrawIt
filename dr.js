@@ -19,6 +19,7 @@ dr.WIDTH = 320;
 dr.HEIGHT = 480;
 
 dr.start = function(){
+
   lib.loadPxLoader(function(){
     //director
     dr.director = new lime.Director(document.body);

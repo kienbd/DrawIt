@@ -97,6 +97,7 @@ dr.Scene.makeMenuScene = function(director) {
   });
 
   lib.setEvent(aboutBtn,['touchstart','mousedown'],function(){
+
     lime.scheduleManager.callAfter(function() {
       director.replaceScene(menuScene.transScenes["aboutScene"]);
     },null,250);
@@ -143,17 +144,37 @@ dr.Scene.makeSettingScene = function(director) {
   volLbl.setFill('assets/setting/volume.png').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
 
   vol_s = new lime.Sprite();
-  vol_s.setFill('assets/setting/selected.png');
+  if(window.localStorage.getItem("vol")) {
+    vol_s.selected = JSON.parse(window.localStorage.getItem("vol"));
+    if(vol_s.selected)
+      vol_s.setFill('assets/setting/selected.png');
+    else
+      vol_s.setFill('assets/setting/select.png');
+  }
+  else {
+    vol_s.setFill('assets/setting/selected.png');
+    vol_s.selected = true;
+    window.localStorage.setItem("vol",true);
+  }
   vol_s.setSize(comSize.switcher).setPosition(220,150).setAnchorPoint(0,0);
-  vol_s.selected = true;
 
   var hintLbl = new lime.Sprite();
   hintLbl.setFill('assets/setting/hint.png').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
 
   hint_s = new lime.Sprite();
-  hint_s.setFill('assets/setting/selected.png');
+  if(window.localStorage.getItem("hint")) {
+    hint_s.selected = JSON.parse(window.localStorage.getItem("hint"));
+    if(hint_s.selected)
+      hint_s.setFill('assets/setting/selected.png');
+    else
+      hint_s.setFill('assets/setting/select.png');
+  }
+  else {
+    hint_s.setFill('assets/setting/selected.png');
+    hint_s.selected = true;
+    window.localStorage.setItem("hint",true);
+  }
   hint_s.setSize(comSize.switcher).setPosition(220,250).setAnchorPoint(0,0);
-  vol_s.selected = true;
 
   var layout = new lime.Layer();
   layout.setPosition(0,0);
@@ -174,10 +195,12 @@ dr.Scene.makeSettingScene = function(director) {
   goog.events.listen(vol_s,['touchstart','mousedown'],function() {
     if(!vol_s.selected) {
       vol_s.selected = true;
+      window.localStorage.setItem("vol",true);
       vol_s.setFill('assets/setting/selected.png');
     }
     else {
       vol_s.selected = false;
+      window.localStorage.setItem("vol",false);
       vol_s.setFill('assets/setting/select.png');
     }
   });
@@ -185,10 +208,12 @@ dr.Scene.makeSettingScene = function(director) {
   goog.events.listen(hint_s,['touchstart','mousedown'],function() {
     if(!hint_s.selected) {
       hint_s.selected = true;
+      window.localStorage.setItem("hint",true);
       hint_s.setFill('assets/setting/selected.png');
     }
     else {
       hint_s.selected = false;
+      window.localStorage.setItem("hint",false);
       hint_s.setFill('assets/setting/select.png');
     }
   });
@@ -256,6 +281,8 @@ dr.Scene.makeSelectScene = function(director) {
 
   funcBtn = new lime.Layer().setPosition(comPosition.funcBtn);
 
+  selectScene.packes = [];
+
   var lbl = new lime.Sprite();
   lbl.setFill('assets/play/playLabel.png');
   lbl.setSize(comSize.lbl);
@@ -276,13 +303,16 @@ dr.Scene.makeSelectScene = function(director) {
     star.setFill('assets/play/star.png');
     star.setSize(comSize.star);
     star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 25);
-    lbl = new lime.Label().setFontFamily('Verdana').
+    var lbl = new lime.Label().setFontFamily('Verdana').
       setFontColor('#fff93c').setFontSize(22).setFontWeight('bold').setSize(23,23).setAnchorPoint(0,0);
-    text = Math.floor(Math.random()*10) + 10;
+    if(!window.localStorage.getItem("pack"+(i+1)))
+      window.localStorage.setItem("pack"+(i+1),0);
+    text = window.localStorage.getItem("pack" + (i+1)) || "";
     lbl.setText(text);
     lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -52,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
     star.setRotation(40);
     lbl.setRotation(30);
+    selectScene.packes.push(lbl);
 
 
     roll = new lime.Sprite();
@@ -564,6 +594,9 @@ dr.Scene.makeGameScene = function(director) {
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     if(gamescene.loaded) {
       gamescene.transScenes['selectScene'].loaded = false;
+      gamescene.transScenes['selectScene'].packes.forEach(function(e,i) {
+        e.setText(window.localStorage.getItem("pack"+(i+1)) || "");
+      });
       director.replaceScene(gamescene.transScenes['selectScene']);
       gamescene.transScenes['selectScene'].loaded = true;
     }
@@ -600,6 +633,10 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshScore = function() {
     lbl.setText(gamescene.game.score);
+    if(window.localStorage.getItem(gamescene.game.name)) {
+      if(JSON.parse(window.localStorage.getItem(gamescene.name)) < gamescene.game.score)
+        window.localStorage.setItem(gamescene.game.name,gamescene.game.score);
+    }
   }
 
   var refreshQuizFrame = function()
