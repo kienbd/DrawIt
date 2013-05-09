@@ -118,33 +118,46 @@ dr.Scene.makeSettingScene = function(director) {
   var comPosition = {
     menuBtn: new goog.math.Coordinate(0,5),
     volLbl: new goog.math.Coordinate(30,150),
-    hintLbl: new goog.math.Coordinate(30,250)
+    hintLbl: new goog.math.Coordinate(30,250),
+    lbl: new goog.math.Coordinate(160,70)
   };
 
   var comSize = {
     menuBtn: new goog.math.Size(50,30),
     volLbl: new goog.math.Size(150,60),
     hintLbl: new goog.math.Size(150,60),
-    switcher: new goog.math.Size(60,60)
+    switcher: new goog.math.Size(60,60),
+    lbl: new goog.math.Size(225,87)
   };
+
+
+  var lbl = new lime.Sprite();
+  lbl.setFill('assets/setting/setting.png');
+  lbl.setSize(comSize.lbl);
+  lbl.setPosition(comPosition.lbl);
 
   menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
 
-  volLbl = new lime.Sprite();
+  var volLbl = new lime.Sprite();
   volLbl.setFill('assets/setting/volume.png').setSize(comSize.volLbl).setPosition(comPosition.volLbl).setAnchorPoint(0,0);
 
-  vol_s = new dr.Button('assets/setting/switcher.png',comSize.switcher);
-  vol_s.setPosition(220,150);
+  vol_s = new lime.Sprite();
+  vol_s.setFill('assets/setting/selected.png');
+  vol_s.setSize(comSize.switcher).setPosition(220,150).setAnchorPoint(0,0);
+  vol_s.selected = true;
 
-  hintLbl = new lime.Sprite();
+  var hintLbl = new lime.Sprite();
   hintLbl.setFill('assets/setting/hint.png').setSize(comSize.hintLbl).setPosition(comPosition.hintLbl).setAnchorPoint(0,0);
 
-  hint_s = new dr.Button('assets/setting/switcher.png',comSize.switcher);
-  hint_s.setPosition(220,250);
+  hint_s = new lime.Sprite();
+  hint_s.setFill('assets/setting/selected.png');
+  hint_s.setSize(comSize.switcher).setPosition(220,250).setAnchorPoint(0,0);
+  vol_s.selected = true;
 
   var layout = new lime.Layer();
   layout.setPosition(0,0);
+  layout.appendChild(lbl);
   layout.appendChild(menuBtn);
   layout.appendChild(volLbl);
   layout.appendChild(vol_s);
@@ -152,13 +165,32 @@ dr.Scene.makeSettingScene = function(director) {
   layout.appendChild(hint_s);
 
 
-
-
-
   settingScene.appendChild(layout);
 
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     director.replaceScene(settingScene.transScenes["menuScene"]);
+  });
+
+  goog.events.listen(vol_s,['touchstart','mousedown'],function() {
+    if(!vol_s.selected) {
+      vol_s.selected = true;
+      vol_s.setFill('assets/setting/selected.png');
+    }
+    else {
+      vol_s.selected = false;
+      vol_s.setFill('assets/setting/select.png');
+    }
+  });
+
+  goog.events.listen(hint_s,['touchstart','mousedown'],function() {
+    if(!hint_s.selected) {
+      hint_s.selected = true;
+      hint_s.setFill('assets/setting/selected.png');
+    }
+    else {
+      hint_s.selected = false;
+      hint_s.setFill('assets/setting/select.png');
+    }
   });
 
   return settingScene;
