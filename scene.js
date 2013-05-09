@@ -34,6 +34,8 @@ dr.Scene = function() {
 
  this.transScenes = {};
 
+ this.loaded = true;
+
 };
 
 goog.inherits(dr.Scene,lime.Scene);
@@ -85,7 +87,13 @@ dr.Scene.makeMenuScene = function(director) {
 
 
   lib.setEvent(playBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(menuScene.transScenes["selectScene"],lime.transitions.SlideInRight,0.7);
+    if(menuScene.loaded) {
+      lime.scheduleManager.callAfter(function() {
+        menuScene.transScenes['selectScene'].loaded = false;
+        director.replaceScene(menuScene.transScenes["selectScene"]);
+        menuScene.transScenes['selectScene'].loaded = true;
+      },null,250);
+    }
   });
 
   lib.setEvent(shopBtn,['touchstart','mousedown'],function(){
@@ -158,19 +166,33 @@ dr.Scene.makeSelectScene = function(director) {
     star.setRotation(20);
     lbl.setRotation(10);
 
+
+    roll = new lime.Sprite();
+    roll.setFill('assets/roll.png');
+    roll.setSize(60,50);
+    roll.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -55,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 32);
+
+
     packHolder.appendChild(pack);
     if(i>2)
       pack.setOpacity(0.3);
     else {
       goog.events.listen(pack,['touchstart','mousedown'],function() {
-        director.replaceScene(selectScene.transScenes["gameScene"],lime.transitions.Dissolve,0.7);
-        dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
+        if(selectScene.loaded) {
+          selectScene.transScenes['gameScene'].loaded = false;
+          director.replaceScene(selectScene.transScenes["gameScene"]);
+          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
+          lime.scheduleManager.callAfter(function() {
+            selectScene.transScenes['gameScene'].loaded = true;
+          },null,150);
+        }
       });
       cover = new lime.Sprite().setAnchorPoint(0,0);
       cover.setFill('assets/pack' + (i+1) + ".png");
       cover.setSize(80,70);
       cover.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width/2-40,40+(comSize.pack.height+30)*row+3+ comSize.pack.height/2-38);
       packHolder.appendChild(cover);
+      packHolder.appendChild(roll);
       packHolder.appendChild(star);
       packHolder.appendChild(lbl);
     }
@@ -187,7 +209,13 @@ dr.Scene.makeSelectScene = function(director) {
 
 
   goog.events.listen(backBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(selectScene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
+    if(selectScene.loaded) {
+      selectScene.transScenes['menuScene'].loaded = false;
+      director.replaceScene(selectScene.transScenes['menuScene']);
+      lime.scheduleManager.callAfter(function() {
+        selectScene.transScenes['menuScene'].loaded = true;
+      },null,150);
+    }
   });
 
   return selectScene;
@@ -291,7 +319,7 @@ dr.Scene.makeGameScene = function(director) {
   gamescene.appendChild(funcBtnHolder);
 
   var boardHolder = new lime.Layer();
-  var board = new dr.Board(15,275,290,190);
+  var board = new dr.Board(15,275,290,170);
   gamescene.board = board;
   gamescene.boardHolder = boardHolder;
   gamescene.hasBoard = false;
@@ -403,7 +431,11 @@ dr.Scene.makeGameScene = function(director) {
     refreshUndoButton();
   });
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    director.replaceScene(gamescene.transScenes['menuScene'],lime.transitions.SlideIn,0.7);
+    if(gamescene.loaded) {
+      gamescene.transScenes['selectScene'].loaded = false;
+      director.replaceScene(gamescene.transScenes['selectScene']);
+      gamescene.transScenes['selectScene'].loaded = true;
+    }
   });
 
   goog.events.listen(remain,['touchstart','mousedown'],function() {
