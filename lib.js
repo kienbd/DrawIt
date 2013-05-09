@@ -106,3 +106,34 @@ var css = 'body { background-image: url(' + bkg_url + ');' + 'background-repeat:
   head.appendChild(style);
 }
 
+lib.loadPxLoader = function(callback) {
+  var arr =['PxLoader.js','PxLoaderImage.js','PxLoaderSound.js','PxLoaderVideo.js'];
+  var len = arr.length;
+  lib.loadjsfile('assets/js/pxloader/' + arr[0],function(){
+    lib.loadjsfile('assets/js/pxloader/' + arr[1],function(){
+      lib.loadjsfile('assets/js/pxloader/' + arr[2],function(){
+        lib.loadjsfile('assets/js/pxloader/' + arr[3],function(){
+          var loader = new PxLoader();
+          var images = [
+            'background.png','group3.png','production.png','icon.png','popup.png','spinner_sheet.png',
+            'menu/logo.png','menu/logo1.png','menu/playBtn.png','menu/settingBtn.png','menu/shopBtn.png',
+            'play/1.png','play/board.png','play/clearBtn.png','play/frame.png','play/menuBtn.png','play/nextBtn.png',
+            'play/playLabel.png','play/prevBtn.png','play/star.png','play/submitBtn.png','play/undoBtn.png'
+          ]
+
+          for (var i = 0; i < images.length; i++) {
+            console.log(images[i]);
+            loader.addImage('assets/'+ images[i]);
+          }
+
+          loader.addCompletionListener(function() {
+            callback();
+          });
+          loader.start();
+
+        });
+      });
+    });
+  });
+}
+
