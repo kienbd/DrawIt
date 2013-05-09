@@ -83,6 +83,7 @@ dr.start = function(){
     gamescene.transScenes["menuScene"] = menuscene;
     gamescene.transScenes["selectScene"] = selectscene;
     menuscene.transScenes["selectScene"] = selectscene;
+    menuscene.transScenes["gameScene"] = gamescene;
     selectscene.transScenes["menuScene"] = menuscene;
     selectscene.transScenes["gameScene"] = gamescene;
     dr.director.replaceScene(menuscene);
