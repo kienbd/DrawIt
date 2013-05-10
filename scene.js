@@ -295,7 +295,7 @@ dr.Scene.makeSelectScene = function(director) {
   var igc;
   for(igc=0;igc<9;igc++) {
 
-    pack = new lime.Sprite().setAnchorPoint(0,0);
+    var pack = new lime.Sprite().setAnchorPoint(0,0);
     col = igc%3;
     row = Math.floor(igc/3);
     pack.setFill('assets/play/frame.png').setSize(comSize.pack)
@@ -316,10 +316,7 @@ dr.Scene.makeSelectScene = function(director) {
     star.setRotation(40);
     lbl.setRotation(30);
     selectScene.packes.push(lbl);
-    var currentpack;
-    currentpack = "pack" + (igc+1);
-    selectScene.gamePack.push(currentpack);
-
+    selectScene.gamePack.push(pack);
 
     roll = new lime.Sprite();
     roll.setFill('assets/roll.png');
@@ -331,14 +328,6 @@ dr.Scene.makeSelectScene = function(director) {
     if(igc>4)
       pack.setOpacity(0.3);
     else {
-      goog.events.listen(pack,['touchstart','mousedown'],function() {
-          selectScene.transScenes['gameScene'].loaded = false;
-          director.replaceScene(selectScene.transScenes["gameScene"]);
-          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
-          lime.scheduleManager.callAfter(function() {
-            selectScene.transScenes['gameScene'].loaded = true;
-          },null,150);
-      });
       cover = new lime.Sprite().setAnchorPoint(0,0);
       cover.setFill('assets/pack' + (igc+1) + ".png");
       cover.setSize(80,70);
@@ -366,6 +355,18 @@ dr.Scene.makeSelectScene = function(director) {
         selectScene.transScenes['menuScene'].loaded = true;
       },null,250);
   });
+
+
+  window.select = selectScene;
+
+  selectScene.gamePack.forEach(function(e,index) {
+    goog.events.listen(e,['touchstart','mousedown'],function() {
+        selectScene.transScenes['gameScene'].loaded = false;
+        director.replaceScene(selectScene.transScenes["gameScene"]);
+        dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],"pack" + (index+1));
+        selectScene.transScenes['gameScene'].loaded = true;
+    });
+  })
 
   return selectScene;
 };
