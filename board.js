@@ -282,10 +282,11 @@ dr.Board.prototype.loadAnswers = function(f)
   var $el = this;
   lib.loadjsfile(f);
   goog.events.listenOnce($el.canvas.getDeepestDomElement(),'answersloaded',function(e) {
-    console.log(fc);
+    // console.log(fc);
     // $el.clearAnswers();
     var answers = window[fc]();
-    console.log('b');
+    // console.log('b');
+    window.quiz_type = answers.pop();
     while (answers.length > 0)
       {
         var a = answers.pop();

@@ -19,7 +19,7 @@ dr.Game = function(packName) {
 };
 
 
-dr.Game.QUIZNUM = 3;
+dr.Game.QUIZNUM = 5;
 
 dr.Game.prototype.changeQuiz = function(i) {
   this.currentID = i;

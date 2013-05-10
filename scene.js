@@ -409,7 +409,7 @@ dr.Scene.makeGameScene = function(director) {
     setFontColor('#c00').setFontSize(26).setFontWeight('bold').setSize(40,30);
   lbl.setPosition(260,15);
 
-  var remain = new lime.Label().setText('3/3').setFontFamily('Verdana').
+  var remain = new lime.Label().setText('5/5').setFontFamily('Verdana').
     setFontColor('#807226').setFontSize(26).setFontWeight('bold').setSize(40,30);
   remain.setPosition(160,20);
   gamescene.remain = remain;
