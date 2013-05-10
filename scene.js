@@ -324,14 +324,14 @@ dr.Scene.makeSelectScene = function(director) {
 
 
     packHolder.appendChild(pack);
-    if(i>2)
+    if(i>5)
       pack.setOpacity(0.3);
     else {
       goog.events.listen(pack,['touchstart','mousedown'],function() {
         if(selectScene.loaded) {
           selectScene.transScenes['gameScene'].loaded = false;
           director.replaceScene(selectScene.transScenes["gameScene"]);
-          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
+          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack' + (i+1));
           lime.scheduleManager.callAfter(function() {
             selectScene.transScenes['gameScene'].loaded = true;
           },null,150);
@@ -359,13 +359,10 @@ dr.Scene.makeSelectScene = function(director) {
 
 
   goog.events.listen(backBtn,['touchstart','mousedown'],function() {
-    if(selectScene.loaded) {
-      selectScene.transScenes['menuScene'].loaded = false;
-      director.replaceScene(selectScene.transScenes['menuScene']);
       lime.scheduleManager.callAfter(function() {
+        director.replaceScene(selectScene.transScenes['menuScene']);
         selectScene.transScenes['menuScene'].loaded = true;
-      },null,150);
-    }
+      },null,250);
   });
 
   return selectScene;
@@ -604,14 +601,12 @@ dr.Scene.makeGameScene = function(director) {
     refreshUndoButton();
   });
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
-    if(gamescene.loaded) {
-      gamescene.transScenes['selectScene'].loaded = false;
-      gamescene.transScenes['selectScene'].packes.forEach(function(e,i) {
-        e.setText(window.localStorage.getItem("pack"+(i+1)) || "");
-      });
-      director.replaceScene(gamescene.transScenes['selectScene']);
-      gamescene.transScenes['selectScene'].loaded = true;
-    }
+      lime.scheduleManager.callAfter(function() {
+          gamescene.transScenes['selectScene'].packes.forEach(function(e,i) {
+            e.setText(window.localStorage.getItem("pack"+(i+1)) || "");
+          });
+          director.replaceScene(gamescene.transScenes['selectScene']);
+      },null,150);
   });
 
   goog.events.listen(remain,['touchstart','mousedown'],function() {
