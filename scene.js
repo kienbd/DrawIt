@@ -89,9 +89,7 @@ dr.Scene.makeMenuScene = function(director) {
   lib.setEvent(playBtn,['touchstart','mousedown'],function() {
     if(menuScene.loaded) {
       lime.scheduleManager.callAfter(function() {
-        menuScene.transScenes['selectScene'].loaded = false;
         director.replaceScene(menuScene.transScenes["selectScene"]);
-        menuScene.transScenes['selectScene'].loaded = true;
       },null,250);
     }
   });
@@ -256,6 +254,7 @@ dr.Scene.makeAboutScene = function(director) {
 dr.Scene.makeSelectScene = function(director) {
 
   var selectScene = new dr.Scene();
+  selectScene.loaded = true;
 
   var comPosition = {
     topLayer: new goog.math.Coordinate(0,0),
@@ -284,6 +283,7 @@ dr.Scene.makeSelectScene = function(director) {
   funcBtn = new lime.Layer().setPosition(comPosition.funcBtn);
 
   selectScene.packes = [];
+  selectScene.gamePack = [];
 
   var lbl = new lime.Sprite();
   lbl.setFill('assets/play/playLabel.png');
@@ -316,6 +316,9 @@ dr.Scene.makeSelectScene = function(director) {
     star.setRotation(40);
     lbl.setRotation(30);
     selectScene.packes.push(lbl);
+    var currentpack;
+    currentpack = "pack" + (igc+1);
+    selectScene.gamePack.push(currentpack);
 
 
     roll = new lime.Sprite();
@@ -329,14 +332,12 @@ dr.Scene.makeSelectScene = function(director) {
       pack.setOpacity(0.3);
     else {
       goog.events.listen(pack,['touchstart','mousedown'],function() {
-        if(selectScene.loaded) {
           selectScene.transScenes['gameScene'].loaded = false;
           director.replaceScene(selectScene.transScenes["gameScene"]);
-          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack' + (igc+1));
+          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],currentpack);
           lime.scheduleManager.callAfter(function() {
             selectScene.transScenes['gameScene'].loaded = true;
           },null,150);
-        }
       });
       cover = new lime.Sprite().setAnchorPoint(0,0);
       cover.setFill('assets/pack' + (igc+1) + ".png");
