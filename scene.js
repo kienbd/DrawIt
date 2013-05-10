@@ -328,13 +328,13 @@ dr.Scene.makeSelectScene = function(director) {
 
 
     packHolder.appendChild(pack);
-    if(igc>5)
+    if(igc>4)
       pack.setOpacity(0.3);
     else {
       goog.events.listen(pack,['touchstart','mousedown'],function() {
           selectScene.transScenes['gameScene'].loaded = false;
           director.replaceScene(selectScene.transScenes["gameScene"]);
-          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],currentpack);
+          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack1');
           lime.scheduleManager.callAfter(function() {
             selectScene.transScenes['gameScene'].loaded = true;
           },null,150);
