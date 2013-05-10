@@ -690,8 +690,9 @@ dr.Scene.makeGameScene = function(director) {
         else {
           gamescene.bubleAni.play();
           lime.scheduleManager.callAfter(function() {
+            if(typeof window.quiz_type == 'object')
               gamescene.hint.setFill('assets/hint' + window.quiz_type[0] + ".png");
-            },true,200);
+            },true,1000);
           gamescene.hint.setHidden(false);
         }
       }
