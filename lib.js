@@ -161,5 +161,11 @@ lib.loopSound = function(sound) {
     sound.play();
   lime.scheduleManager.callAfter(function(){
     lib.loopSound(sound);
-  },true,sound.isLoaded() == true ? sound.buffer.duration : 2);
+  },true,sound.isLoaded() == true ? (typeof sound.buffer != 'undefined'  ? sound.buffer.duration: 2) : 2);
 }
+
+// lib.stopSound = function() {
+  // window.sounds['assets/theme.mp3'].stop();
+  // window.sounds['assets/true.mp3'].stop();
+  // window.sounds['assets/wrong.mp3'].stop();
+// }

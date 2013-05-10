@@ -545,7 +545,8 @@ dr.Scene.makeGameScene = function(director) {
       result = gamescene.board.submit();
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
-          window.sounds['assets/true.mp3'].play();
+          if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
+            window.sounds['assets/true.mp3'].play();
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
           nextBtn.clickStatus = "unavail";
@@ -568,7 +569,8 @@ dr.Scene.makeGameScene = function(director) {
           });
         } else {
           if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
-            window.sounds['assets/wrong.mp3'].play();
+            if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
+              window.sounds['assets/wrong.mp3'].play();
             shakeAni.play();
             // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
             gamescene.board.isReady = true;
@@ -577,6 +579,7 @@ dr.Scene.makeGameScene = function(director) {
         }
       } else {
         if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
+
           window.sounds['assets/wrong.mp3'].play();
           shakeAni.play();
           // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){

@@ -9,7 +9,6 @@ goog.require('lime.Layer');
 goog.require('lime.animation.KeyframeAnimation');
 goog.require('lime');
 goog.require('lime.audio.Audio');
-goog.require('lime.audio.AudioMap');
 // components
 goog.require('lib');
 goog.require('dr.Scene');
@@ -105,7 +104,8 @@ dr.start = function(){
     },dr.director,0);
 
     lib.setBackground('assets/background.png',320,480);
-    lib.loopSound(window.sounds['assets/theme.mp3']); //see in lib
+    if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
+      lib.loopSound(window.sounds['assets/theme.mp3']); //see in lib
   });
 
 };
