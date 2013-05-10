@@ -292,11 +292,12 @@ dr.Scene.makeSelectScene = function(director) {
 
   topLayer.appendChild(lbl);
 
-  for(i=0;i<9;i++) {
+  var igc;
+  for(igc=0;igc<9;igc++) {
 
     pack = new lime.Sprite().setAnchorPoint(0,0);
-    col = i%3;
-    row = Math.floor(i/3);
+    col = igc%3;
+    row = Math.floor(igc/3);
     pack.setFill('assets/play/frame.png').setSize(comSize.pack)
     pack.setPosition(15+(comSize.pack.width+10)*col,40+(comSize.pack.height+30)*row);
 
@@ -307,9 +308,9 @@ dr.Scene.makeSelectScene = function(director) {
     star.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -10,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 25);
     var lbl = new lime.Label().setFontFamily('Verdana').
       setFontColor('#fff93c').setFontSize(22).setFontWeight('bold').setSize(23,23).setAnchorPoint(0,0);
-    if(!window.localStorage.getItem("pack"+(i+1)))
-      window.localStorage.setItem("pack"+(i+1),0);
-    text = window.localStorage.getItem("pack" + (i+1)) || "";
+    if(!window.localStorage.getItem("pack"+(igc+1)))
+      window.localStorage.setItem("pack"+(igc+1),0);
+    text = window.localStorage.getItem("pack" + (igc+1)) || "";
     lbl.setText(text);
     lbl.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width -52,40+(comSize.pack.height+30)*row+3+ comSize.pack.height - 20);
     star.setRotation(40);
@@ -324,21 +325,21 @@ dr.Scene.makeSelectScene = function(director) {
 
 
     packHolder.appendChild(pack);
-    if(i>5)
+    if(igc>5)
       pack.setOpacity(0.3);
     else {
       goog.events.listen(pack,['touchstart','mousedown'],function() {
         if(selectScene.loaded) {
           selectScene.transScenes['gameScene'].loaded = false;
           director.replaceScene(selectScene.transScenes["gameScene"]);
-          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack' + (i+1));
+          dr.Scene.reloadGameScene(selectScene.transScenes["gameScene"],'pack' + (igc+1));
           lime.scheduleManager.callAfter(function() {
             selectScene.transScenes['gameScene'].loaded = true;
           },null,150);
         }
       });
       cover = new lime.Sprite().setAnchorPoint(0,0);
-      cover.setFill('assets/pack' + (i+1) + ".png");
+      cover.setFill('assets/pack' + (igc+1) + ".png");
       cover.setSize(80,70);
       cover.setPosition(15+(comSize.pack.width+10)*col+ comSize.pack.width/2-40,40+(comSize.pack.height+30)*row+3+ comSize.pack.height/2-38);
       packHolder.appendChild(cover);
@@ -602,8 +603,8 @@ dr.Scene.makeGameScene = function(director) {
   });
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
       lime.scheduleManager.callAfter(function() {
-          gamescene.transScenes['selectScene'].packes.forEach(function(e,i) {
-            e.setText(window.localStorage.getItem("pack"+(i+1)) || "");
+          gamescene.transScenes['selectScene'].packes.forEach(function(e,index) {
+            e.setText(window.localStorage.getItem("pack"+(index+1)) || "");
           });
           director.replaceScene(gamescene.transScenes['selectScene']);
       },null,150);
