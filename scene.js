@@ -325,7 +325,7 @@ dr.Scene.makeSelectScene = function(director) {
 
 
     packHolder.appendChild(pack);
-    if(igc>5)
+    if(igc>4)
       pack.setOpacity(0.3);
     else {
       cover = new lime.Sprite().setAnchorPoint(0,0);
