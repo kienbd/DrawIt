@@ -203,6 +203,7 @@ dr.Scene.makeSettingScene = function(director) {
       window.localStorage.setItem("vol",false);
       vol_s.setFill('assets/setting/select.png');
     }
+    lib.toggleSound();
   });
 
   goog.events.listen(hint_s,['touchstart','mousedown'],function() {
@@ -216,6 +217,7 @@ dr.Scene.makeSettingScene = function(director) {
       window.localStorage.setItem("hint",false);
       hint_s.setFill('assets/setting/select.png');
     }
+    lib.toggleSound();
   });
 
   return settingScene;
@@ -546,7 +548,7 @@ dr.Scene.makeGameScene = function(director) {
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
           if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
-            window.sounds['assets/true.mp3'].play();
+            soundManager.play('assets/true.mp3',{});
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
           nextBtn.clickStatus = "unavail";
@@ -570,17 +572,18 @@ dr.Scene.makeGameScene = function(director) {
         } else {
           if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
             if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
-              window.sounds['assets/wrong.mp3'].play();
-            shakeAni.play();
-            // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
-            gamescene.board.isReady = true;
-            // },null,0)
+
+              soundManager.play('assets/wrong.mp3',{});
+              shakeAni.play();
+              // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
+              gamescene.board.isReady = true;
+              // },null,0)
           }
         }
       } else {
         if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
 
-          window.sounds['assets/wrong.mp3'].play();
+          soundManager.play('assets/wrong.mp3',{});
           shakeAni.play();
           // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
           gamescene.board.isReady = true;
