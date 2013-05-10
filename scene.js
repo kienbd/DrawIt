@@ -402,7 +402,7 @@ dr.Scene.makeGameScene = function(director) {
     board: new goog.math.Size(300,200)
   };
 
-  var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
+  var menuBtn = new dr.Button('assets/play/backBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
 
   var lbl = new lime.Label().setText('0').setFontFamily('Verdana').
