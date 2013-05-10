@@ -681,10 +681,19 @@ dr.Scene.makeGameScene = function(director) {
     left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
 
     if(JSON.parse(window.localStorage.getItem('hint'))) {
-      if(left > 0 && typeof window.quiz_type == 'object') {
-        gamescene.bubleAni.play();
-        gamescene.hint.setFill('assets/hint' + window.quiz_type[gamescene.game.currentID] + ".png");
-        gamescene.hint.setHidden(false);
+      if(left > 0 ) {
+        if(typeof window.quiz_type == 'object') {
+          gamescene.bubleAni.play();
+          gamescene.hint.setFill('assets/hint' + window.quiz_type[gamescene.game.currentID] + ".png");
+          gamescene.hint.setHidden(false);
+        }
+        else {
+          gamescene.bubleAni.play();
+          lime.scheduleManager.callAfter(function() {
+              gamescene.hint.setFill('assets/hint' + window.quiz_type[0] + ".png");
+            },true,200);
+          gamescene.hint.setHidden(false);
+        }
       }
     } else
       gamescene.hint.setHidden(true);
@@ -711,6 +720,7 @@ dr.Scene.reloadGameScene = function(gamescene,packname) {
     gamescene.board.loadAnswers(game.answers);
     gamescene.board.isReady = true;
     gamescene.refreshScene();
+
 
     gamescene.popup.removeAllChildren();
     gamescene.game.allQuiz.forEach(function(q,i) {
