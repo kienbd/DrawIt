@@ -8,7 +8,6 @@ goog.require('lime.animation.Spawn');
 goog.require('lime.animation.RotateTo');
 goog.require('lime.animation.MoveTo');
 goog.require('lime.animation.Loop');
-goog.require('lime.audio.Audio');
 
 lib.loadjsfile = function loadScript(url, callback){
     var script = document.createElement("script")
@@ -110,8 +109,8 @@ lib.loadPxLoader = function(callback) {
   var len = arr.length;
   lib.loadjsfile('assets/js/pxloader/' + arr[0],function(){
     lib.loadjsfile('assets/js/pxloader/' + arr[1],function(){
-      // lib.loadjsfile('assets/js/pxloader/' + arr[2],function(){
-        // lib.loadjsfile('assets/js/pxloader/' + arr[3],function(){
+      lib.loadjsfile('assets/js/pxloader/' + arr[2],function(){
+        lib.loadjsfile('assets/js/pxloader/' + arr[3],function(){
           // lib.loadjsfile('assets/js/pxloader/' + arr[4],function(){
             var loader = new PxLoader();
 
@@ -122,50 +121,54 @@ lib.loadPxLoader = function(callback) {
               'play/playLabel.png','play/prevBtn.png','play/star.png','play/submitBtn.png','play/undoBtn.png'
             ]
             for (var i = 0; i < images.length; i++) {
-              // console.log(images[i]);
               loader.addImage('assets/'+ images[i]);
             }
 
             var sounds = ['assets/theme.mp3','assets/true.mp3','assets/wrong.mp3'];
 
-            var soundsLoaded = function(sounds) {
-              var count = 0;
-              for (var i = 0; i< sounds.length; i++){
-                if (window.sounds[sounds[i]].isLoaded() == true)
-                  count += 1;
+            // init soundmanager
+            soundManager.url = 'soundManager2/';
+            // soundManager.flashVersion = 9;
+            soundManager.useHighPerformance = true;
+            // soundManager.flashLoadTimeout = 500;
+
+            // soundManager.ontimeout(function(status){
+            soundManager.userHTML5Audio = true;
+            soundManager.preferFlash = false;
+            soundManager.reboot();
+            // });
+            soundManager.onready(function(){
+              for (var i = 0; i < sounds.length; i++) {
+                if (!soundManager.canPlayURL(sounds[i]))
+                  continue;
+                loader.addSound(sounds[i],sounds[i]);
               }
-              if (count == sounds.length) return true;
-              else return false;
-            }
-
-
-            window.sounds = {};
-            for (var i = 0; i < sounds.length; i++) {
-              window.sounds[sounds[i]] = new lime.audio.Audio(sounds[i]);
-            }
-
-            loader.addCompletionListener(function() {
-              callback();
+              loader.addCompletionListener(function() {
+                callback();
+              });
+              loader.start();
             });
-            loader.start();
 
-          // });
-        // });
-      // });
+            // });
+        });
+      });
     });
   });
 }
 
-lib.loopSound = function(sound) {
-  if (sound.isPlaying() == false)
-    sound.play();
+
+lib.loopSound = function(sid) {
   lime.scheduleManager.callAfter(function(){
-    lib.loopSound(sound);
-  },true,sound.isLoaded() == true ? (typeof sound.buffer != 'undefined'  ? sound.buffer.duration: 2) : 2);
+    soundManager.play(sid,{
+      onfinish: function(){
+        lib.loopSound(sid);
+      }
+    });
+  },true,1);
 }
 
 // lib.stopSound = function() {
-  // window.sounds['assets/theme.mp3'].stop();
-  // window.sounds['assets/true.mp3'].stop();
-  // window.sounds['assets/wrong.mp3'].stop();
+// window.sounds['assets/theme.mp3'].stop();
+// window.sounds['assets/true.mp3'].stop();
+// window.sounds['assets/wrong.mp3'].stop();
 // }
