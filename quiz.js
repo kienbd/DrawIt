@@ -6,8 +6,7 @@ goog.require('dr.Sprite');
 dr.Quiz = function(link) {
   lime.Sprite.call(this);
   this.source = link;
-  this.name = /assets\/pack\d*\/(.*)_(.*).png/.exec(link)[1];
-  this.type = /assets\/pack\d*\/(.*)_(.*).png/.exec(link)[2];
+  this.name = /assets\/pack\d*\/(.*).png/.exec(link)[1];
 }
 
 dr.Quiz.width = 240;

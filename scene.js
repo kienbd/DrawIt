@@ -490,8 +490,8 @@ dr.Scene.makeGameScene = function(director) {
   var hintHolder = new lime.Layer();
   hintHolder.setPosition(10,265);
   var hint = new lime.Sprite().setAnchorPoint(0,0);
-  hint.setSize(150,60).setPosition(0,0);
-  hint.setFill('#FFFFFF');
+  hint.setSize(150,70).setPosition(0,0);
+  hint.setFill('assets/hint.png');
 
   popup.setScale(0);
   popupHolder.appendChild(popup);
