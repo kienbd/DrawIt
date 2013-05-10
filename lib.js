@@ -116,7 +116,7 @@ lib.loadPxLoader = function(callback) {
 
             var images = [
               'background.png','group3.png','production.png','icon.png','popup.png','spinner_sheet.png',
-              'menu/logo.png','menu/logo1.png','menu/playBtn.png','menu/settingBtn.png','menu/shopBtn.png',
+              'menu/logo.png','menu/logo1.png','menu/playBtn.png','menu/settingBtn.png','menu/aboutBtn.png',
               'play/1.png','play/board.png','play/clearBtn.png','play/frame.png','play/menuBtn.png','play/nextBtn.png',
               'play/playLabel.png','play/prevBtn.png','play/star.png','play/submitBtn.png','play/undoBtn.png'
             ]
@@ -169,8 +169,5 @@ lib.loopSound = function(sid) {
 
 
 lib.toggleSound = function() {
-  // soundManager.toggleMute('assets/theme.mp3');
-  // soundManager.toggleMute('assets/true.mp3');
-  // soundManager.toggleMute('assets/wrong.mp3');
 }
 

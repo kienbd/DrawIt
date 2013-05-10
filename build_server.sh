@@ -6,6 +6,7 @@ rm -rf compiled/
 mkdir -p compiled/assets/answers
 cp -R assets/* compiled/assets/
 rm -rf compiled/*.manifest
+rm -f compiled/dr.manifest
 touch compiled/dr.manifest
 echo "CACHE MANIFEST" > compiled/dr.manifest
 echo >> compiled/dr.manifest
