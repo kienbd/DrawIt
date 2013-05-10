@@ -683,8 +683,9 @@ dr.Scene.makeGameScene = function(director) {
     left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
 
     if(JSON.parse(window.localStorage.getItem('hint'))) {
-      if(left > 0) {
+      if(left > 0 && typeof window.quiz_type == 'object') {
         gamescene.bubleAni.play();
+        gamescene.hint.setFill('assets/hint' + window.quiz_type[gamescene.game.currentID] + ".png");
         gamescene.hint.setHidden(false);
       }
     } else
@@ -693,7 +694,7 @@ dr.Scene.makeGameScene = function(director) {
 
   var refreshRemain = function() {
     left = gamescene.game.totalQuiz - gamescene.game.solvedQuizzes.length;
-    remain.setText(left + "/3");
+    remain.setText(left + "/5");
   }
 
   return gamescene;
