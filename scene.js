@@ -203,7 +203,7 @@ dr.Scene.makeSettingScene = function(director) {
       window.localStorage.setItem("vol",false);
       vol_s.setFill('assets/setting/select.png');
     }
-    lib.toggleSound();
+    // lib.toggleSound();
   });
 
   goog.events.listen(hint_s,['touchstart','mousedown'],function() {
@@ -217,7 +217,7 @@ dr.Scene.makeSettingScene = function(director) {
       window.localStorage.setItem("hint",false);
       hint_s.setFill('assets/setting/select.png');
     }
-    lib.toggleSound();
+    // lib.toggleSound();
   });
 
   return settingScene;
@@ -506,6 +506,12 @@ dr.Scene.makeGameScene = function(director) {
   var flipAni = new lime.animation.ColorTo('#000000');
   var bubleAni = new lib.makeBubleAnimation(10);
 
+
+  var trueSound = soundManager.createSound({id:'true',url:'assets/true.mp3'});
+  var wrongSound = soundManager.createSound({id:'wrong',url:'assets/wrong.mp3'});
+  trueSound.readyState = 3;
+  wrongSound.readyState = 3;
+
   gamescene.bubleAni = bubleAni;
 
   hint.setHidden(true);
@@ -547,8 +553,6 @@ dr.Scene.makeGameScene = function(director) {
       result = gamescene.board.submit();
       if(typeof result != "undefined") {
         if(result["Name"] == gamescene.game.currentQuiz().name && result["Score"] > 80) {
-          if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
-            soundManager.play('assets/true.mp3',{});
           gamescene.game.solveCurrentQuiz(3); //3 is score player got
           gamescene.board.isReady = false;
           nextBtn.clickStatus = "unavail";
@@ -558,6 +562,9 @@ dr.Scene.makeGameScene = function(director) {
           aniC = new lime.animation.ColorTo('#000000');
           aniC.setDuration(1);
           quiz.runAction(aniC);
+          if(JSON.parse(window.localStorage.getItem('vol')))
+            if(trueSound.readyState == 3)
+              trueSound.unload().play();
           goog.events.listenOnce(aniC,lime.animation.Event.STOP,function(){
             quiz.setFill(gamescene.game.currentQuiz().getAnswerFrame());
             //auto change quiz
@@ -571,10 +578,11 @@ dr.Scene.makeGameScene = function(director) {
           });
         } else {
           if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
-            if(window.localStorage.getItem('vol') && JSON.parse(window.localStorage.getItem('vol')))
+            shakeAni.play();
+            if(JSON.parse(window.localStorage.getItem('vol')))
+              if(wrongSound.readyState == 3)
+                wrongSound.unload().play();
 
-              soundManager.play('assets/wrong.mp3',{});
-              shakeAni.play();
               // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
               gamescene.board.isReady = true;
               // },null,0)
@@ -582,9 +590,10 @@ dr.Scene.makeGameScene = function(director) {
         }
       } else {
         if(gamescene.hint.getHidden() || !JSON.parse(window.localStorage.getItem('hint'))) {
-
-          soundManager.play('assets/wrong.mp3',{});
           shakeAni.play();
+          if(JSON.parse(window.localStorage.getItem('vol')))
+            if(wrongSound.readyState == 3)
+              wrongSound.unload().play();
           // goog.events.listenOnce(shakeAni,lime.animation.Event.STOP,function(){
           gamescene.board.isReady = true;
           // },null,0)

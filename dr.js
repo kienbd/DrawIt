@@ -25,9 +25,9 @@ dr.start = function(){
     dr.director.setSize(dr.WIDTH,dr.HEIGHT);
     dr.director.makeMobileWebAppCapable();
 
-    lib.loopSound('assets/theme.mp3'); //see in lib
-    if(window.localStorage.getItem('vol') && !JSON.parse(window.localStorage.getItem('vol')))
-      lib.toggleSound();
+    // lib.loopSound('assets/theme.mp3'); //see in lib
+    // if(window.localStorage.getItem('vol') && !JSON.parse(window.localStorage.getItem('vol')))
+      // lib.toggleSound();
 
     var loadingscene = new lime.Scene();
 

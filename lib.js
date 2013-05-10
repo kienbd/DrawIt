@@ -169,8 +169,8 @@ lib.loopSound = function(sid) {
 
 
 lib.toggleSound = function() {
-  soundManager.toggleMute('assets/theme.mp3');
-  soundManager.toggleMute('assets/true.mp3');
-  soundManager.toggleMute('assets/wrong.mp3');
+  // soundManager.toggleMute('assets/theme.mp3');
+  // soundManager.toggleMute('assets/true.mp3');
+  // soundManager.toggleMute('assets/wrong.mp3');
 }
 
