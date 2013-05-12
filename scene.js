@@ -234,13 +234,17 @@ dr.Scene.makeAboutScene = function(director) {
 
   var menuBtn = new dr.Button('assets/play/menuBtn.png',comSize.menuBtn);
   menuBtn.setPosition(comPosition.menuBtn);
+  var ab_image = new lime.Sprite().setAnchorPoint(0,0);
+  ab_image.setFill("assets/about/1.png");
+  ab_image.setSize(300,430);
+  ab_image.setPosition(10,30);
 
   var layout = new lime.Layer();
   layout.setPosition(0,0);
   layout.appendChild(menuBtn);
+  layout.appendChild(ab_image);
 
   aboutScene.appendChild(layout);
-
 
   lib.setEvent(menuBtn,['touchstart','mousedown'],function() {
     director.replaceScene(aboutScene.transScenes['menuScene']);
